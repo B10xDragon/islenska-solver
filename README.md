@@ -1,6 +1,6 @@
 # Íslenska Solver — iPad Safari bookmarklet
 
-The product is the one-line `javascript:` URL in `dist/bookmarklet.txt`, not a local webpage. It launches its own floating board/rack solver overlay on an ordinary Safari page. Version 2.1 adds read-only detection/import of the visible Netskrafl board and rack, including on malstadur.mideind.is. It never modifies or submits moves to a live game. Suggestions and placement are confined to its private editor.
+The product is the one-line `javascript:` URL in `dist/bookmarklet.txt`, not a local webpage. It launches its own floating board/rack solver overlay on an ordinary Safari page. Version 2.2 adds read-only detection/import of the visible Netskrafl board and rack, including on malstadur.mideind.is. It never modifies or submits moves to a live game. Suggestions and placement are confined to its private editor.
 
 ## iPad installation
 
@@ -18,13 +18,13 @@ The product is the one-line `javascript:` URL in `dist/bookmarklet.txt`, not a l
 12. Tap the bookmark.
 13. The solver overlay appears.
 
-First tap opens, second hides, third shows. Close hides without discarding in-memory edits. Collapse reduces the overlay to its header. Drag the header with a finger; viewport changes and drag limits keep the header reachable. Controls need no hover or shortcuts. The board is horizontally scrollable, with 44px touch squares. Pinch zoom remains enabled; the panel adapts to the visual viewport / onscreen keyboard. Portrait and landscape are supported.
+First tap opens, second hides, third shows. Close hides without discarding in-memory edits. Collapse reduces the overlay to its header. Drag the header with a finger; viewport changes and drag limits keep the header reachable. Controls need no hover or shortcuts. The default panel is 360px wide, with separate Result, Board, and Rack tabs. A full-board overview fits in Result; the Board editor remains horizontally scrollable with 44px touch squares. Actions stay fixed at the bottom and results no longer scroll away automatically. Pinch zoom remains enabled; the panel adapts to the visual viewport / onscreen keyboard. Portrait and landscape are supported.
 
 Some pages enforce CSP restrictions on external scripts or frames. Safari internal pages and such restricted pages cannot reliably run a bookmarklet. A visible retry message and console diagnostics appear on failure; use another ordinary page. The product cannot override a host's security policy.
 
 ## Use
 
-* On a loaded Netskrafl game, the overlay detects the game URL and imports the visible board/rack automatically, then solves after the dictionary is ready. **Import current game** refreshes the snapshot and recalculates. Same-origin embedded boards are supported. The adapter reads Netskrafl `sq_A1`…`sq_O15` / `sq_R1`…`sq_R7` cells, `.tile` letters, `.letterscore`, `.blanktile`, and `dl/tl/dw/tw` classes. Unsubmitted `.racktile` board tiles are treated as rack tiles in the private snapshot without recalling them live. If a cross-origin frame prevents access, a clear message explains that limitation.
+* On a loaded Netskrafl game, the overlay detects the game URL and imports the visible board/rack automatically, then solves after the dictionary is ready. **Import current game** refreshes the snapshot and recalculates. Same-origin embedded boards are supported. The adapter supports Netskrafl coordinate IDs and attributes, 15×15/16×16 tables, CSS grids with zero/one-based row/column attributes, and open shadow roots, in addition to same-origin frames. It reads original tile markup or plain letter/score spans, blanks, and premium attributes/classes. Unsubmitted `.racktile` board tiles are treated as rack tiles in the private snapshot without recalling them live. If a cross-origin frame prevents access, a clear message explains that limitation.
 * Tap a rack slot, then tap the Icelandic tile picker. Entry advances through seven slots. `?` is a zero-value blank.
 * Tap **Edit board**. Tap a square, then choose its existing letter from the picker. Set **Selected board tile is a blank** for old blanks, which score zero. **Clear square**, **Clear board**, and **Done** are touch controls.
 * The default board is the source-verified Netskrafl standard board. Selected-square **Premium** can edit DL/TL/DW/TW for experiments.
@@ -35,10 +35,10 @@ Some pages enforce CSP restrictions on external scripts or frames. Safari intern
 
 ## Architecture
 
-The bookmarklet is a small guarded script loader. It loads `solver.bundle.js?v=2.1.0`, exposing `window.__ISLENSKA_SOLVER__` with `version`, `open()`, `close()`, `toggle()`, `solve()`, `detectGame()`, `importGame()`, and `destroy()`. Repeated taps cannot create duplicate UI or concurrent script injections. `solve()` recalculates the private snapshot. A new-version bookmarklet destroys an old-version panel before loading the upgrade.
+The bookmarklet is a small guarded script loader. It loads `solver.bundle.js?v=2.2.0`, exposing `window.__ISLENSKA_SOLVER__` with `version`, `open()`, `close()`, `toggle()`, `solve()`, `detectGame()`, `importGame()`, and `destroy()`. Repeated taps cannot create duplicate UI or concurrent script injections. `solve()` recalculates the private snapshot. A new-version bookmarklet destroys an old-version panel before loading the upgrade.
 
 
-The loader mounts the GUI directly inside a Shadow DOM panel. There is no hosted iframe dependency. Málstaður's CSP allows `cdn.jsdelivr.net` scripts but blocks scripts and frames from GitHub Pages; the loader therefore uses the immutable GitHub release `v2.1.0` served by jsDelivr. CSS and layout are bundled into the script. The dictionary is a separate base64 data script from the same permitted CDN; it decodes to the identical ~3MB upstream DAWG ArrayBuffer and is saved to IndexedDB. There is no cross-origin fetch to a blocked host. Later launches on the same page origin reuse the cached binary. Automatic Moves preference is stored on that origin as well.
+The loader mounts the GUI directly inside a Shadow DOM panel. There is no hosted iframe dependency. Málstaður's CSP allows `cdn.jsdelivr.net` scripts but blocks scripts and frames from GitHub Pages; the loader therefore uses the immutable GitHub release `v2.2.0` served by jsDelivr. CSS and layout are bundled into the script. The dictionary is a separate base64 data script from the same permitted CDN; it decodes to the identical ~3MB upstream DAWG ArrayBuffer and is saved to IndexedDB. There is no cross-origin fetch to a blocked host. Later launches on the same page origin reuse the cached binary. Automatic Moves preference is stored on that origin as well.
 
 The worker is bundled source loaded through a blob URL, permitted by Málstaður's `worker-src 'self' blob:` policy. If workers are unavailable, the cooperative solver yields every 2,048 visits. The optional GitHub Pages debug page still works, but it is not the primary workflow.
 
@@ -74,7 +74,7 @@ npm run bookmarklet
 
 Build minifies production `dist/solver.bundle.js`, `gui.bundle.js`, and `worker.bundle.js`, then copies dictionary/styles/app/debug page and writes the one-line `dist/bookmarklet.txt`. The debug page is optional. No localhost server is needed for the actual product.
 
-`hosting.json` defines the GitHub Pages base URL, jsDelivr asset URL, and release version. Publish the matching `v2.1.0` Git tag before distributing the bookmarklet; the CDN asset URL pins that immutable release. Changing hosts requires rebuilding the bookmarklet. Bump the version when changing bundle assets and the cache key in `dictionary-cache.js` when updating the DAWG. `scripts/fetch-dictionary.mjs` downloads the upstream binary; `public/dictionary.sha256` pins the tracked copy. `scripts/extract-rules.py` extracts source values/layouts from a checked-out Netskrafl reference; `src/rules.js` is tracked so ordinary builds need no external repository.
+`hosting.json` defines the GitHub Pages base URL, jsDelivr asset URL, and release version. Publish the matching `v2.2.0` Git tag before distributing the bookmarklet; the CDN asset URL pins that immutable release. Changing hosts requires rebuilding the bookmarklet. Bump the version when changing bundle assets and the cache key in `dictionary-cache.js` when updating the DAWG. `scripts/fetch-dictionary.mjs` downloads the upstream binary; `public/dictionary.sha256` pins the tracked copy. `scripts/extract-rules.py` extracts source values/layouts from a checked-out Netskrafl reference; `src/rules.js` is tracked so ordinary builds need no external repository.
 
 The included `.github/workflows/pages.yml` checks/builds and deploys `dist/` on main. Configure repository Pages to use GitHub Actions. If workflow modification permissions are unavailable, a `gh-pages` branch containing `dist/` can be deployed by Pages' branch publishing mode instead. No secrets are committed.
 
@@ -85,3 +85,5 @@ Unit tests include the retained independent exhaustive reference solver on 80 sm
 Browser verification scripts are in `scripts/` when available; physical iPad Safari installation remains a manual verification step.
 
 CSP regression verification: `node scripts/csp-check.mjs` uses WebKit with Málstaður-equivalent script/frame/worker restrictions and a Netskrafl DOM fixture based on the provided screenshot. It tests automatic board/rack import and solving, host DOM immutability even after local placement, cache reuse, and repeated-launch behavior. This does not authenticate into or inspect a private live match.
+
+Version 2.2 guard: On a game URL with no successfully imported board, Recalculate is disabled. It does not silently substitute an empty board. **Settings & diagnostics → Use manual board** explicitly opts into manual input. **Copy detection report** provides structural details (tables, IDs, classes, selected data attributes, and frame accessibility) for matching an unsupported signed-in layout; no cookies or account credentials are read. The actual authenticated layout still needs this report when source-based adapters do not recognize it.
