@@ -1,1 +1,5 @@
-{"baseUrl":"https://b10xdragon.github.io/islenska-solver/","version":"2.0.0"}
+{
+  "baseUrl": "https://b10xdragon.github.io/islenska-solver/",
+  "version": "2.1.0",
+  "assetBaseUrl": "https://cdn.jsdelivr.net/gh/B10xDragon/islenska-solver@v2.1.0/dist/"
+}
