@@ -1,0 +1,2 @@
+import fs from 'node:fs';import crypto from 'node:crypto';
+const url='https://netskrafl-cdn.ams3.digitaloceanspaces.com/dawg/ordalisti.bin.dawg';const response=await fetch(url);if(!response.ok)throw Error('DAWG fetch failed: '+response.status);const buffer=Buffer.from(await response.arrayBuffer());fs.writeFileSync('public/dictionary.bin',buffer);console.log('DAWG bytes:',buffer.length,'SHA256:',crypto.createHash('sha256').update(buffer).digest('hex'));console.log('Bump dictionary cache key and release version when updating.');

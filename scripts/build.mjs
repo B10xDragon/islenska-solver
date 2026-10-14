@@ -1,0 +1,5 @@
+import {build} from 'esbuild';import fs from 'node:fs';import {execFileSync} from 'node:child_process';
+const config=JSON.parse(fs.readFileSync('hosting.json','utf8'));fs.mkdirSync('dist',{recursive:true});
+for(const [entry,outfile]of [['src/bookmarklet.js','solver.bundle.js'],['src/gui.js','gui.bundle.js'],['src/worker.js','worker.bundle.js']])await build({entryPoints:[entry],outfile:'dist/'+outfile,bundle:true,minify:true,format:'iife',target:['safari15'],define:{VERSION:JSON.stringify(config.version),HOST_URL:JSON.stringify(config.baseUrl)}});
+for(const name of ['styles.css','dictionary.bin','dictionary.sha256'])fs.copyFileSync('public/'+name,'dist/'+name);fs.writeFileSync('dist/.nojekyll','');
+fs.writeFileSync('dist/app.html',fs.readFileSync('public/app.html','utf8').replace('gui.bundle.js?v=2.0.0','gui.bundle.js?v='+config.version));fs.copyFileSync('ATTRIBUTION.md','dist/ATTRIBUTION.md');fs.copyFileSync('index.html','dist/index.html');execFileSync(process.execPath,['scripts/bookmarklet.mjs'],{stdio:'inherit'});
