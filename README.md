@@ -1,69 +1,77 @@
 # Íslenska Solver — iPad Safari bookmarklet
 
-The product is the one-line `javascript:` URL in `dist/bookmarklet.txt`, not a local webpage. It launches its own floating board/rack solver overlay on an ordinary Safari page. Version 2.2 adds read-only detection/import of the visible Netskrafl board and rack, including on malstadur.mideind.is. It never modifies or submits moves to a live game. Suggestions and placement are confined to its private editor.
+The primary product is the one-line `javascript:` URL in `dist/bookmarklet.txt`. Version **2.3.0** automatically follows the visible Netskrafl position and can stage a move by clicking each rack tile and then its destination. **It never clicks Submit, ends a turn, passes, exchanges, or resigns.** You review and submit the turn yourself.
 
-## iPad installation
+## Install on iPad
 
 1. Open an ordinary webpage in Safari.
-2. Tap Share.
-3. Tap Add Bookmark.
-4. Save it.
-5. Open Safari bookmarks.
-6. Edit the new bookmark.
-7. Name it **Íslenska Solver**.
-8. Delete its URL.
-9. Paste the complete one-line URL printed by `npm run bookmarklet` or found in `dist/bookmarklet.txt`.
-10. Save it.
-11. Open an ordinary webpage.
-12. Tap the bookmark.
-13. The solver overlay appears.
+2. Tap Share → Add Bookmark → Save.
+3. Open Safari bookmarks and edit that bookmark.
+4. Name it **Íslenska Solver**.
+5. Replace its URL with the complete one-line URL in `dist/bookmarklet.txt` (also printed by `npm run bookmarklet`).
+6. Save it, return to your loaded Netskrafl game, and tap the bookmark.
 
-First tap opens, second hides, third shows. Close hides without discarding in-memory edits. Collapse reduces the overlay to its header. Drag the header with a finger; viewport changes and drag limits keep the header reachable. Controls need no hover or shortcuts. The default panel is 360px wide, with separate Result, Board, and Rack tabs. A full-board overview fits in Result; the Board editor remains horizontally scrollable with 44px touch squares. Actions stay fixed at the bottom and results no longer scroll away automatically. Pinch zoom remains enabled; the panel adapts to the visual viewport / onscreen keyboard. Portrait and landscape are supported.
+First tap opens; another hides; another shows. The bookmarklet upgrades an older version automatically. A narrow panel, Result/Board/Rack tabs, fixed actions, full-board overview, 44px editor controls, safe-area padding, touch dragging, collapse, zoom and portrait/landscape support keep it usable on iPad.
 
-Some pages enforce CSP restrictions on external scripts or frames. Safari internal pages and such restricted pages cannot reliably run a bookmarklet. A visible retry message and console diagnostics appear on failure; use another ordinary page. The product cannot override a host's security policy.
+## Live position updates
 
-## Use
+On a game page, the reader imports the visible board, rack, blank meanings, and premiums. Mutation observation with debouncing plus a one-second fallback check keeps the position current. It automatically recalculates when the committed position or available rack changes; it does not need a Refresh tap after each turn.
 
-* On a loaded Netskrafl game, the overlay detects the game URL and imports the visible board/rack automatically, then solves after the dictionary is ready. **Import current game** refreshes the snapshot and recalculates. Same-origin embedded boards are supported. The adapter supports Netskrafl coordinate IDs and attributes, 15×15/16×16 tables, CSS grids with zero/one-based row/column attributes, and open shadow roots, in addition to same-origin frames. It reads original tile markup or plain letter/score spans, blanks, and premium attributes/classes. Unsubmitted `.racktile` board tiles are treated as rack tiles in the private snapshot without recalling them live. If a cross-origin frame prevents access, a clear message explains that limitation.
-* Tap a rack slot, then tap the Icelandic tile picker. Entry advances through seven slots. `?` is a zero-value blank.
-* Tap **Edit board**. Tap a square, then choose its existing letter from the picker. Set **Selected board tile is a blank** for old blanks, which score zero. **Clear square**, **Clear board**, and **Done** are touch controls.
-* The default board is the source-verified Netskrafl standard board. Selected-square **Premium** can edit DL/TL/DW/TW for experiments.
-* Tap **Recalculate** to search all legal horizontal and vertical moves. The maximum score is prominent; up to 30 sorted top moves are shown. Tap another move to select it and view its score breakdown. New tiles are translucent bright green ghost letters; old letters remain normal.
-* **Show move** opens and scrolls to the suggested tiles. **Place move** commits exactly the suggested tiles to this private board and removes consumed rack letters. **Undo placement** restores board/rack.
-* **Automatic Moves** defaults OFF. OFF only suggests/highlights. ON automatically places the maximum move after a solve. Preference persists through localStorage on the hosted origin. It never submits an external turn. Changing ON takes effect on the next solve.
-* **Settings → Clear dictionary cache** removes the IndexedDB cache. It downloads again on the next new launch. Closing/reopening an existing panel reuses its current dictionary.
+The game URL, committed board, sorted rack inventory, and premiums form the position key. Rack shuffling does not require another search. Pending tiles are distinguished from committed tiles and included in the normalized rack, so the solver's own staging does not become a new position or trigger a placement loop. Stale worker results are discarded, and queued updates solve the latest position.
 
-## Architecture
+The source line shows imported board/rack counts and staged tiles. **Refresh game** remains available. If a game layout cannot be read, solving is disabled instead of silently using an empty board. Settings → Copy detection report provides structural diagnostics without cookies or account credentials.
 
-The bookmarklet is a small guarded script loader. It loads `solver.bundle.js?v=2.2.0`, exposing `window.__ISLENSKA_SOLVER__` with `version`, `open()`, `close()`, `toggle()`, `solve()`, `detectGame()`, `importGame()`, and `destroy()`. Repeated taps cannot create duplicate UI or concurrent script injections. `solve()` recalculates the private snapshot. A new-version bookmarklet destroys an old-version panel before loading the upgrade.
+Closing/hiding the panel pauses live monitoring and cancels any remaining placement clicks. Reopening reads the latest position and resumes. Editing a board/rack/premium manually switches to the local editor and pauses live sync; Refresh game reconnects to the game.
 
+## Automatic Moves and placement
 
-The loader mounts the GUI directly inside a Shadow DOM panel. There is no hosted iframe dependency. Málstaður's CSP allows `cdn.jsdelivr.net` scripts but blocks scripts and frames from GitHub Pages; the loader therefore uses the immutable GitHub release `v2.2.0` served by jsDelivr. CSS and layout are bundled into the script. The dictionary is a separate base64 data script from the same permitted CDN; it decodes to the identical ~3MB upstream DAWG ArrayBuffer and is saved to IndexedDB. There is no cross-origin fetch to a blocked host. Later launches on the same page origin reuse the cached binary. Automatic Moves preference is stored on that origin as well.
+Automatic Moves defaults **OFF**. Version 2.3 uses a new saved preference so an old local-only ON setting does not silently turn on game clicking.
 
-The worker is bundled source loaded through a blob URL, permitted by Málstaður's `worker-src 'self' blob:` policy. If workers are unavailable, the cooperative solver yields every 2,048 visits. The optional GitHub Pages debug page still works, but it is not the primary workflow.
+* **OFF:** follow the game, solve, and highlight the best move. **Place in game** stages the selected move when you press it.
+* **ON:** solve a new position and stage the highest-scoring move automatically, once per position. The preference is saved in localStorage on the current page origin.
+* Placement clicks only a matching rack tile, its exact destination square, and (for a blank) the requested Icelandic letter in the game's blank-choice dialog.
+* The adapter rereads the live position before every click step and verifies each staged tile. Repeated letters consume distinct rack slots. Matching tiles already staged are left in place; conflicting staged tiles cause a clear stop message.
+* The reader recognizes Netskrafl's opponent-turn/game-over indicators and waits. A changed board/rack or rejected click stops the sequence; it does not keep clicking or automatically undo user actions.
+* **Stop**, switching Automatic Moves OFF, hiding, or destroying the panel cancels remaining clicks. Already staged tiles remain for review; use the game's own recall control if needed. Recalculate explicitly permits trying again after a recall or stopped attempt.
+* No action submits a turn. Click the game's own Submit button yourself.
 
-`dawg.js` reads the upstream compressed binary directly: node edge counts, single/multi-letter edges, interior terminal bits, and little-endian child offsets. No millions-of-words expansion. API: `dawg.root()`, `dawg.follow(node, 'Þ')`, `dawg.isTerminal(node)`, and `dawg.has(word)`. Only parsed edge descriptors are cached, with an 8,192-node bound.
+On an ordinary page or in explicit **Use manual board** mode, placement continues to update only the private editor. **Undo** restores local placement; it is not a live-game recall button.
 
-Move generation uses anchor squares, rack-count-bounded starts, cross-checks, DAWG prefix pruning, both orientations, counted repeated letters and blank assignments, and incremental main/cross scoring. There is no move-count/time cutoff; every legal generated move is sorted by descending score. Equivalent tile placements are deduplicated. Every newly formed main/cross word must exist in the DAWG. Ties retain the first maximum move.
+## Manual editor
 
-`solve(board, rack, dawg, multipliers)` returns `{bestMove, moves, stats}`. Moves include `{word, score, row, col, direction, placedTiles}`; `column` is a compatibility alias. Tile entries include `{row, col, column, letter, blank}`. Coordinates are zero-based; the GUI displays one-based coordinates. `bestMove` is null if none exists. `stats` includes `ms`, `anchors`, `nodes`, and `legalMoves`. Score breakdowns are attached to the first 100 moves. The pre-existing board is assumed valid; unrelated old words are not revalidated.
+Rack has seven slots and an Icelandic picker; `?` is a blank. Board shows a compact full-position preview and a separate scrollable editor with 44px squares. Choose a square, then **Choose letter**. Existing blanks score zero. Selected-square premiums support Normal, DL, TL, DW, TW. Top moves are sorted by score and selectable; score breakdown shows main, crosses, bonus and total. Only newly suggested tiles have bright translucent highlights.
 
-## Actual rules
+## Hosting and architecture
 
-Verified against Netskrafl source commit `452b7fcd147316b3be53e38c0126da2722f141b0`:
+GitHub Pages: https://b10xdragon.github.io/islenska-solver/
 
-* `is_IS` uses `NewTileSet`, `IcelandicAlphabet`, `ordalisti`, and the `standard` board.
-* 32 Icelandic letters; seven rack tiles; 100 bag tiles including two blanks.
-* New tile values/frequencies are in `src/rules.js`, extracted from `src/languages.py`.
-* 15×15 board with 24 DL, 12 TL, 17 DW (including center), and 8 TW squares, extracted from `_LSC` / `_WSC` in `src/skraflmechanics.py`.
-* Blanks represent an Icelandic letter and always score zero.
-* Premiums apply only when a new tile is placed. Word premiums multiply together, so two DW are ×4.
-* Main and perpendicular cross words score separately. A new tile's DL/TL and DW/TW apply in each word independently. Existing premiums never apply again.
-* Seven newly placed tiles earn +50, including blank tiles. Emptying a smaller rack earns no bingo.
+Málstaður allows `cdn.jsdelivr.net` scripts but blocks GitHub Pages scripts/frames. The small bookmarklet therefore loads the immutable GitHub release **v2.3.0** through jsDelivr. The GUI is mounted directly in a Shadow DOM panel, with bundled CSS/layout and no hosted iframe. The separate dictionary data script is loaded from the same permitted CDN, decoded to its original binary ArrayBuffer, and cached in IndexedDB. Later launches on that page origin reuse the cache. Settings → Clear dictionary cache removes it.
 
-These defaults are extracted from Icelandic source, not substituted English rules. Tests validate exact values, counts, and layouts. For custom values, edit `src/rules.js` and rebuild; for experimental board premiums use the UI. Attribution and licensing: [ATTRIBUTION.md](ATTRIBUTION.md).
+A bundled-source blob Web Worker handles search under Málstaður's permitted `worker-src 'self' blob:` policy. If workers are unavailable, cooperative generator execution yields every 2,048 node visits. The product does not request any game API endpoints or read hidden opponent racks. Game actions use the visible client's existing click handlers.
 
-## Build, tests, and hosting
+Public API: `window.__ISLENSKA_SOLVER__` exposes `version`, `open()`, `close()`, `toggle()`, `solve()`, `detectGame()`, `importGame()` and `destroy()`. Repeated taps cannot inject duplicate panels. Source modules:
+
+* `dawg.js`: direct cursor traversal of Netskrafl packed DAWG.
+* `dictionary-cache.js`: IndexedDB and dictionary data loader.
+* `game-detection.js`: board/rack/premiums/pending-tile/turn reader across coordinate cells, tables, CSS grids, open shadow roots and same-origin frames.
+* `live-game.js`: position keys, debounced monitoring, verified rack/destination click sequence and cancellation.
+* `solver.js`: anchor/cross-check/DAWG move generation with incremental scoring.
+* `scoring.js`, `board.js`, `rules.js`: scoring and source-verified game data.
+* `gui.js`, `bookmarklet.js`: panel interaction and lifecycle.
+
+Cross-origin or closed frames cannot be read by a bookmarklet on their parent page. Some unrelated pages block permitted scripts differently. Inaccessible positions are reported explicitly; there is no browser-security override.
+
+## Dictionary, solver and actual Icelandic rules
+
+The bundled ~3MB `ordalisti` DAWG is Netskrafl's game vocabulary, not the earlier Hunspell spelling list. It is read directly, including compressed multi-letter edges, interior terminal markers and little-endian child pointers; no millions-of-words JavaScript Set is built. API: `dawg.root()`, `dawg.follow(node, 'Þ')`, `dawg.isTerminal(node)`, `dawg.has(word)`.
+
+Move generation uses anchors, rack-count-bounded starts, perpendicular cross-checks, DAWG prefix pruning, both directions, repeated letters and blank assignments. There is no search cutoff; every generated legal move is scored and sorted descending. Equivalent tile placements are deduplicated. `solve(board, rack, dawg, multipliers)` returns `{bestMove, moves, stats}` with zero-based `{word, score, row, col, direction, placedTiles}`. `column` is a compatibility alias. `stats` has `ms`, `anchors`, `nodes`, and `legalMoves`. The pre-existing board is assumed valid; all newly formed words are checked.
+
+Rules are extracted from Netskrafl source commit `452b7fcd147316b3be53e38c0126da2722f141b0`: Icelandic `NewTileSet`, 32 letters, seven rack tiles, 100 bag tiles including two zero-value blanks; 15×15 standard board with 24 DL, 12 TL, 17 DW including center, and 8 TW squares. Seven newly placed tiles earn +50. Existing premiums never score again. New letter and word premiums apply independently in the main and crossing words, with multiple word premiums multiplying together. Tile values and counts are in `src/rules.js`.
+
+Dictionary and source attribution/license terms are in [ATTRIBUTION.md](ATTRIBUTION.md).
+
+## Build, deploy and tests
 
 ```bash
 npm ci
@@ -72,18 +80,16 @@ npm test
 npm run bookmarklet
 ```
 
-Build minifies production `dist/solver.bundle.js`, `gui.bundle.js`, and `worker.bundle.js`, then copies dictionary/styles/app/debug page and writes the one-line `dist/bookmarklet.txt`. The debug page is optional. No localhost server is needed for the actual product.
+Build produces minified `dist/solver.bundle.js`, GUI/worker assets, dictionary data, and a one-line `dist/bookmarklet.txt`. `hosting.json` defines the Pages URL, release version, and pinned jsDelivr asset base. Publish the matching release tag before sharing the bookmarklet. The workflow tests/builds and deploys `dist/` to Pages on main.
 
-`hosting.json` defines the GitHub Pages base URL, jsDelivr asset URL, and release version. Publish the matching `v2.2.0` Git tag before distributing the bookmarklet; the CDN asset URL pins that immutable release. Changing hosts requires rebuilding the bookmarklet. Bump the version when changing bundle assets and the cache key in `dictionary-cache.js` when updating the DAWG. `scripts/fetch-dictionary.mjs` downloads the upstream binary; `public/dictionary.sha256` pins the tracked copy. `scripts/extract-rules.py` extracts source values/layouts from a checked-out Netskrafl reference; `src/rules.js` is tracked so ordinary builds need no external repository.
+For browser tests on a machine with WebKit dependencies:
 
-The included `.github/workflows/pages.yml` checks/builds and deploys `dist/` on main. Configure repository Pages to use GitHub Actions. If workflow modification permissions are unavailable, a `gh-pages` branch containing `dist/` can be deployed by Pages' branch publishing mode instead. No secrets are committed.
+```bash
+npx playwright install --with-deps webkit
+npm run test:browser
+npm run test:live
+```
 
-The production bundle tests require `npm run build` first. For WebKit browser checks: `npx playwright install --with-deps webkit` then `npm run test:browser` on a machine with browser system dependencies. The script intercepts hosting URLs to serve the built artifacts; it verifies the deployment architecture before publishing, not the live hosting endpoint.
+Unit tests include the independent exhaustive reference solver over 80 small boards, 828 upstream Python DAWG comparisons, all premium/blank/cross/bingo cases, sorted maximum scoring, game adapters, cache-independent bootstrap/API behavior, live click order and repeated letters, blank dialogs, stale/opponent/conflicting positions, partial moves, cancellation, and watcher cleanup.
 
-Unit tests include the retained independent exhaustive reference solver on 80 small boards; premium, cross, bingo and blank tests; highest score and full sorted output; automatic private-board placement; 828 lookup comparisons with upstream Python DAWG; actual tile/layout checks; and production bookmarklet API, one-line prefix, duplicate injection, visible retry UI, and open/close/toggle tests.
-
-Browser verification scripts are in `scripts/` when available; physical iPad Safari installation remains a manual verification step.
-
-CSP regression verification: `node scripts/csp-check.mjs` uses WebKit with Málstaður-equivalent script/frame/worker restrictions and a Netskrafl DOM fixture based on the provided screenshot. It tests automatic board/rack import and solving, host DOM immutability even after local placement, cache reuse, and repeated-launch behavior. This does not authenticate into or inspect a private live match.
-
-Version 2.2 guard: On a game URL with no successfully imported board, Recalculate is disabled. It does not silently substitute an empty board. **Settings & diagnostics → Use manual board** explicitly opts into manual input. **Copy detection report** provides structural details (tables, IDs, classes, selected data attributes, and frame accessibility) for matching an unsupported signed-in layout; no cookies or account credentials are read. The actual authenticated layout still needs this report when source-based adapters do not recognize it.
+WebKit tests cover iPad portrait/landscape layout, manual placement and caching, and an interactive Netskrafl-shaped fixture under Málstaður-equivalent CSP. The live fixture checks automatic rack/board updates, exact game staging, no repeated-click loop, waiting for the opponent, a new turn, hide/resume, and zero submit-button activations. It simulates the existing client handlers; it does not authenticate into a private match.
