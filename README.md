@@ -1,6 +1,6 @@
 # Íslenska Solver — iPad Safari bookmarklet
 
-The primary product is the one-line `javascript:` URL in `dist/bookmarklet.txt`. Version **2.3.0** automatically follows the visible Netskrafl position and can stage a move by clicking each rack tile and then its destination. **It never clicks Submit, ends a turn, passes, exchanges, or resigns.** You review and submit the turn yourself.
+The primary product is the one-line `javascript:` URL in `dist/bookmarklet.txt`. Version **2.4.0** automatically follows the visible Netskrafl position and can stage a move by clicking each rack tile and then its destination. **It never clicks Submit, ends a turn, passes, exchanges, or resigns.** You review and submit the turn yourself.
 
 ## Install on iPad
 
@@ -19,7 +19,7 @@ On a game page, the reader imports the visible board, rack, blank meanings, and 
 
 The game URL, committed board, sorted rack inventory, and premiums form the position key. Rack shuffling does not require another search. Pending tiles are distinguished from committed tiles and included in the normalized rack, so the solver's own staging does not become a new position or trigger a placement loop. Stale worker results are discarded, and queued updates solve the latest position.
 
-The source line shows imported board/rack counts and staged tiles. **Refresh game** remains available. If a game layout cannot be read, solving is disabled instead of silently using an empty board. Settings → Copy detection report provides structural diagnostics without cookies or account credentials.
+The source line shows committed board/rack counts and unsubmitted tiles. Gray draft tiles are excluded using explicit draggable markers, verified visible move history with rack appearance, and conservation of rack inventory across updates. An existing unfinished draft pauses automatic solving/placement until you submit or recall it; it never becomes a new committed position. **Refresh game** remains available. If a game layout cannot be read, solving is disabled instead of silently using an empty board. Settings → Copy detection report provides structural diagnostics without cookies or account credentials.
 
 Closing/hiding the panel pauses live monitoring and cancels any remaining placement clicks. Reopening reads the latest position and resumes. Editing a board/rack/premium manually switches to the local editor and pauses live sync; Refresh game reconnects to the game.
 
@@ -45,7 +45,7 @@ Rack has seven slots and an Icelandic picker; `?` is a blank. Board shows a comp
 
 GitHub Pages: https://b10xdragon.github.io/islenska-solver/
 
-Málstaður allows `cdn.jsdelivr.net` scripts but blocks GitHub Pages scripts/frames. The small bookmarklet therefore loads the immutable GitHub release **v2.3.0** through jsDelivr. The GUI is mounted directly in a Shadow DOM panel, with bundled CSS/layout and no hosted iframe. The separate dictionary data script is loaded from the same permitted CDN, decoded to its original binary ArrayBuffer, and cached in IndexedDB. Later launches on that page origin reuse the cache. Settings → Clear dictionary cache removes it.
+Málstaður allows `cdn.jsdelivr.net` scripts but blocks GitHub Pages scripts/frames. The small bookmarklet therefore loads the immutable GitHub release **v2.4.0** through jsDelivr. The GUI is mounted directly in a Shadow DOM panel, with bundled CSS/layout and no hosted iframe. The separate dictionary data script is loaded from the same permitted CDN, decoded to its original binary ArrayBuffer, and cached in IndexedDB. Later launches on that page origin reuse the cache. Settings → Clear dictionary cache removes it.
 
 A bundled-source blob Web Worker handles search under Málstaður's permitted `worker-src 'self' blob:` policy. If workers are unavailable, cooperative generator execution yields every 2,048 node visits. The product does not request any game API endpoints or read hidden opponent racks. Game actions use the visible client's existing click handlers.
 
@@ -54,7 +54,7 @@ Public API: `window.__ISLENSKA_SOLVER__` exposes `version`, `open()`, `close()`,
 * `dawg.js`: direct cursor traversal of Netskrafl packed DAWG.
 * `dictionary-cache.js`: IndexedDB and dictionary data loader.
 * `game-detection.js`: board/rack/premiums/pending-tile/turn reader across coordinate cells, tables, CSS grids, open shadow roots and same-origin frames.
-* `live-game.js`: position keys, debounced monitoring, verified rack/destination click sequence and cancellation.
+* `live-game.js`: position keys, debounced monitoring, stateful draft tracking, coordinate-bearing rack/destination click sequence and cancellation.
 * `solver.js`: anchor/cross-check/DAWG move generation with incremental scoring.
 * `scoring.js`, `board.js`, `rules.js`: scoring and source-verified game data.
 * `gui.js`, `bookmarklet.js`: panel interaction and lifecycle.
@@ -92,4 +92,4 @@ npm run test:live
 
 Unit tests include the independent exhaustive reference solver over 80 small boards, 828 upstream Python DAWG comparisons, all premium/blank/cross/bingo cases, sorted maximum scoring, game adapters, cache-independent bootstrap/API behavior, live click order and repeated letters, blank dialogs, stale/opponent/conflicting positions, partial moves, cancellation, and watcher cleanup.
 
-WebKit tests cover iPad portrait/landscape layout, manual placement and caching, and an interactive Netskrafl-shaped fixture under Málstaður-equivalent CSP. The live fixture checks automatic rack/board updates, exact game staging, no repeated-click loop, waiting for the opponent, a new turn, hide/resume, and zero submit-button activations. It simulates the existing client handlers; it does not authenticate into a private match.
+WebKit tests cover iPad portrait/landscape layout, manual placement and caching, and an interactive Netskrafl-shaped fixture under Málstaður-equivalent CSP. The live fixture checks automatic rack/board updates, exact game staging, no repeated-click loop, waiting for the opponent, a new turn, hide/resume, and zero submit-button activations. It additionally covers the reported ten-tile screenshot with an unmarked gray E at C2, opening with an unfinished draft, recalling it and automatically staging once. It simulates the existing client handlers; it does not authenticate into a private match.
