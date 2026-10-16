@@ -1,6 +1,6 @@
 import {Dawg} from './dawg.js';
 import {loadDictionary} from './dictionary-cache.js';
-import {solveAsync} from './solver.js';
+import {solveStrategic} from './strategy.js';
 export function createSearchClient({window:w=window,dictionaryUrl}) {
  let ready,dictionary,worker,workerUrl,request=0,pending=null,destroyed=false;
  function stopWorker(error){worker?.terminate();worker=null;if(workerUrl){w.URL.revokeObjectURL(workerUrl);workerUrl=null;}if(pending){pending.reject(error);pending=null;}}
@@ -13,8 +13,8 @@ export function createSearchClient({window:w=window,dictionaryUrl}) {
    }catch{stopWorker(Error('Worker unavailable.'));}
   })().catch(error=>{ready=null;throw error;});return ready;
  }
- return {prepare,async solve(snapshot){await prepare();if(destroyed)throw Error('Solver closed.');if(!worker)return solveAsync(snapshot.board,snapshot.rack.filter(Boolean),dictionary,snapshot.multipliers);
-   try{return await new Promise((resolve,reject)=>{const id=++request;pending={id,resolve,reject};worker.postMessage({type:'solve',id,board:snapshot.board,rack:snapshot.rack.filter(Boolean),multipliers:snapshot.multipliers});});}
-   catch(error){if(destroyed)throw error;stopWorker(error);return solveAsync(snapshot.board,snapshot.rack.filter(Boolean),dictionary,snapshot.multipliers);}
-  },destroy(){destroyed=true;stopWorker(Error('Solver closed.'));dictionary=null;}};
+ let queue=Promise.resolve();const client={prepare,async solve(snapshot,options={}){await prepare();if(destroyed)throw Error('Solver closed.');if(!worker)return solveStrategic(snapshot.board,snapshot.rack.filter(Boolean),dictionary,snapshot.multipliers,options);
+   try{return await new Promise((resolve,reject)=>{const id=++request;pending={id,resolve,reject};worker.postMessage({type:'solve',id,board:snapshot.board,rack:snapshot.rack.filter(Boolean),multipliers:snapshot.multipliers,options});});}
+   catch(error){if(destroyed)throw error;stopWorker(error);return solveStrategic(snapshot.board,snapshot.rack.filter(Boolean),dictionary,snapshot.multipliers,options);}
+  },destroy(){destroyed=true;stopWorker(Error('Solver closed.'));dictionary=null;}};return {...client,solve(...args){const next=queue.then(()=>client.solve(...args));queue=next.catch(()=>{});return next;}};
 }

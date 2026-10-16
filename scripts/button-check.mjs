@@ -14,7 +14,7 @@ export async function checkButton({actual=false,viewport={width:1024,height:768}
   page=await context.newPage();page.on('pageerror',error=>errors.push(error.message));page.on('request',request=>{if(request.url().includes('dictionary-data.js'))downloads++;});await page.goto('https://malstadur.mideind.is/netskrafl');
   if(actual)await page.evaluate(({helper,source,values,multipliers})=>{window.client=(0,eval)('('+helper+')')(window,source,{letters:'UUOKÆNV',values,multipliers});},{helper:installMalstadurClient.toString(),source:loadClientSource(),values:DEFAULT_VALUES,multipliers:standardMultipliers()});
   else await page.evaluate(({helper,values})=>{window.DEFAULT_VALUES=values;window.client=(0,eval)('('+helper+')')(document,{letters:'KATTAIR'});},{helper:installClickGame.toString(),values:DEFAULT_VALUES});
-  await page.evaluate(code);const host=page.locator('#islenska-solver-host'),button=host.locator('button');await host.waitFor({state:'attached',timeout:30000});
+  await page.evaluate(code);const host=page.locator('#islenska-solver-host'),button=host.locator('button');await host.waitFor({state:'attached',timeout:30000});await page.evaluate(()=>window.__ISLENSKA_SOLVER__.setStrategy({mode:'max-points'}));
   assert.equal(await host.locator('button').count(),1);assert.equal(await host.locator('section,table,nav').count(),0);assert.equal(await button.getAttribute('aria-pressed'),'false');assert.equal(downloads,0,'OFF does not load the dictionary');
   const initial=await host.boundingBox();assert(initial.width<=100&&initial.height<=50);assert(initial.x>viewport.width-120&&initial.y<25);
   // Dragging cannot turn automation on, and the button cannot be lost offscreen.

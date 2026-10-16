@@ -1,5 +1,5 @@
 import {positionKey,watchGame} from './live-game.js';
-export function createAutomation({read,search,stage,submit,doc,onState=()=>{},watch=watchGame}) {
+export function createAutomation({read,search,stage,submit,doc,onState=()=>{},watch=watchGame,getOptions=()=>({})}) {
  let state={enabled:false,phase:'off',message:'Auto place and Leika OFF',bestMove:null,stats:null},watcher=null,active=null,destroyed=false,generation=0,plan=null;
  const attempted=new Set();
  function publish(phase,message,extra={}){state={...state,phase,message,...extra};onState({...state});}
@@ -20,9 +20,9 @@ export function createAutomation({read,search,stage,submit,doc,onState=()=>{},wa
    try{
     publish('loading','Loading Icelandic dictionary…');await search.prepare(message=>{if(valid())publish('loading',message);});checked();
     let move;if(plan?.key===key&&matching(read()))move=plan.move;
-    else{publish('solving','Finding the highest-scoring move…');const result=await search.solve(snapshot);checked();move=result.bestMove;state={...state,bestMove:move,stats:result.stats};}
-    if(!move){attempted.add(key);publish('waiting','No legal move available.');return;}
-    plan={key,move};attempted.add(key);checked();publish('placing',`Placing ${move.word} · ${move.score} points`);
+    else{publish('solving','Evaluating moves and opponent opportunities…');const result=await search.solve(snapshot,getOptions(snapshot));checked();move=result.bestMove;state={...state,bestMove:move,stats:result.stats,result};}
+    if(!move){attempted.add(key);publish('waiting',state.result?.endgame?.pass?'Endgame recommends passing. Pass manually.':'No legal move available.');return;}
+    plan={key,move};publish('preview',`${move.word} · ${move.score} points · rating ${move.evaluation??move.score}`);await new Promise(r=>setTimeout(r,350));checked();attempted.add(key);checked();publish('placing',`Placing ${move.word} · ${move.score} points`);
     await stage({move,expected:key,signal:task.controller.signal,onProgress:(done,total)=>{if(valid())publish('placing',`Placing ${move.word}: ${done}/${total}`);}});checked();
     publish('submitting','Waiting for Leika…');await submit({move,expected:key,signal:task.controller.signal,isEnabled:valid});
     if(valid())publish('waiting',`${move.word} submitted. Waiting for the next turn.`);
@@ -38,5 +38,5 @@ export function createAutomation({read,search,stage,submit,doc,onState=()=>{},wa
   watcher=watch({read,doc,onChange:consider});
  }
  publish('off','Auto place and Leika OFF');
- return {setEnabled,toggle(){setEnabled(!state.enabled);},refresh(){if(state.enabled)consider(read());},getState(){return {...state};},destroy(){setEnabled(false);destroyed=true;search.destroy();}};
+ return {reconfigure(){setEnabled(false);plan=null;attempted.clear();},setEnabled,toggle(){setEnabled(!state.enabled);},refresh(){if(state.enabled)consider(read());},getState(){return {...state};},destroy(){setEnabled(false);destroyed=true;search.destroy();}};
 }
