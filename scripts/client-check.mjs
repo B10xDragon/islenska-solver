@@ -22,7 +22,7 @@ try {
  assert.equal(await page.evaluate(()=>window.client.game.selectedSq),null);
  await page.evaluate(()=>{window.client.events.length=0;});
  await page.evaluate(code);const gui=page.locator('#islenska-solver-host');
- await gui.locator('#word').filter({hasText:'KVON'}).waitFor({timeout:30000});
+ await gui.locator('#word').filter({hasText:'KVON'}).waitFor({timeout:30000});assert(!await gui.locator('#auto-submit').isChecked());assert.equal(await gui.locator('#top-moves').evaluate(e=>e.open),false);await gui.locator('#top-moves summary').tap();assert(await gui.locator('.move').first().isVisible());await gui.locator('#top-moves summary').tap();assert(!await gui.locator('.move').first().isVisible());
  const expected=await gui.locator('#preview .mini-square').evaluateAll(elements=>elements.flatMap((e,i)=>e.classList.contains('ghost')?[{row:Math.floor(i/15),col:i%15,letter:e.textContent}]:[]));
  await gui.locator('#auto').check();await gui.locator('#status').filter({hasText:/Review and submit/}).waitFor({timeout:30000});
  assert.deepEqual(await page.evaluate(()=>window.__ISLENSKA_SOLVER__.detectGame().pendingTiles.map(({row,col,letter})=>({row,col,letter}))),expected);
@@ -38,12 +38,23 @@ try {
  await gui.locator('#auto').check();await gui.locator('#status').filter({hasText:/Review and submit/}).waitFor({timeout:30000});
  const blank=await page.evaluate(()=>window.__ISLENSKA_SOLVER__.detectGame().pendingTiles.some(tile=>tile.blank));
  assert(blank,'the best second move uses the actual blank picker');assert.equal(await page.evaluate(()=>window.client.submissions),0);
+ // Auto submit is separate and can be enabled after a verified placement.
+ await page.evaluate(()=>window.client.setSubmitReady(false));await gui.locator('#auto-submit').check();
+ await gui.locator('#status').filter({hasText:/Waiting for Leika/}).waitFor();await page.waitForTimeout(200);assert.equal(await page.evaluate(()=>window.client.submissions),0);
+ await gui.locator('#auto-submit').uncheck();await gui.locator('#status').filter({hasText:/Auto submit stopped/}).waitFor({timeout:5000});
+ await page.evaluate(()=>window.client.setSubmitReady(true));await gui.locator('#auto-submit').check();await page.waitForFunction(()=>window.client.submissions===1);
+ await page.waitForTimeout(1200);assert.equal(await page.evaluate(()=>window.client.submissions),1,'Leika clicked once');
+ // Already enabled: a new solve stages and then submits the next local position.
+ await gui.locator('#auto').uncheck();await page.evaluate(()=>window.client.commit('KATTAIR'));
+ await gui.locator('#rack-summary').filter({hasText:/K.*A.*T.*T.*A.*I.*R/}).waitFor({timeout:10000});await gui.locator('#place:enabled').waitFor({timeout:30000});
+ await gui.locator('#auto').check();await page.waitForFunction(()=>window.client.submissions===2,{},{timeout:30000});await page.waitForTimeout(1200);assert.equal(await page.evaluate(()=>window.client.submissions),2);
  // A user-committed turn remains readable and waits for the opponent.
  await page.evaluate(()=>{window.client.commit('KATTAIR');window.client.setOpponent(true);});
  await gui.locator('#game-status').filter({hasText:/Waiting for your turn/}).waitFor({timeout:10000});
  before=await page.evaluate(()=>window.client.attempts.length);await page.waitForTimeout(1200);assert.equal(await page.evaluate(()=>window.client.attempts.length),before);
  await page.evaluate(code);await page.evaluate(code);assert.equal(await page.locator('#islenska-solver-host').count(),1);
+ await page.evaluate(()=>window.__ISLENSKA_SOLVER__.destroy());await page.evaluate(code);assert(await gui.locator('#auto-submit').isChecked());assert.equal(await gui.locator('#top-moves').evaluate(e=>e.open),false);assert.equal(await page.evaluate(()=>window.client.submissions),2);
  assert.deepEqual(gameRequests,[]);assert.deepEqual(errors,[]);
- console.log('PASS WebKit exact reported client: native click failure reproduced; full GUI KVON stages R4/R7/R3/R6 → H8/H9/H10/H11; blank/repeats; no loop; opponent wait; no submit or game API requests; duplicate launch prevented.');
+ console.log('PASS WebKit exact reported client: native click failure reproduced; full GUI KVON stages R4/R7/R3/R6 → H8/H9/H10/H11; blank/repeats; no loop; opponent wait; opt-in Leika OFF/ON, readiness/cancellation, one click per move, saved preference, collapsed expandable moves, no game API requests, duplicate launch prevented.');
  await context.close();
 } catch(error){if(activePage)console.error('Client failure diagnostic',JSON.stringify(await activePage.evaluate(()=>({status:document.getElementById('islenska-solver-host')?.shadowRoot.getElementById('status').textContent,lastAttempt:window.__ISLENSKA_SOLVER__?.getDiagnostics().roots[0].placement.lastAttempt,selected:window.client?.game.selectedSq,blank:window.client?.game.askingForBlank,dialog:window.client?.game.showingDialog}))));throw error;} finally {await browser.close();}
