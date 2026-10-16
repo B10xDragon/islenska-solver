@@ -1,5 +1,6 @@
 import {detectGame} from './game-detection.js';
 import {normalize} from './dictionary.js';
+import {describeElement,recordPlacement} from './placement-diagnostics.js';
 export function positionKey(s){return s?.detected?JSON.stringify([s.gameId,s.board.map(row=>row.map(t=>t?[t.letter,!!t.blank]:null)),[...s.rack].filter(Boolean).sort(),s.multipliers]):'unreadable';}
 function observationKey(s){return JSON.stringify([positionKey(s),s?.rackSlots,s?.pendingTiles,s?.canStage,s?.stageReason,s?.message]);}
 function ownNode(node){const e=node?.nodeType===1?node:node?.parentElement;return e?.closest?.('#islenska-solver-host')||e?.getRootNode?.().host?.id==='islenska-solver-host';}
@@ -15,7 +16,12 @@ const pause=ms=>new Promise(resolve=>setTimeout(resolve,ms));
 async function until(test,{signal,timeout=3500,delay=40,message='The game did not accept the tile click. Placement stopped; review the board.'}={}){const start=Date.now();while(Date.now()-start<timeout){abort(signal);const value=test();if(value)return value;await pause(delay);}throw Error(message);}
 function sameTile(a,b){return !!a&&!!b&&a.letter===b.letter&&!!a.blank===!!b.blank;}
 function pendingMap(s){return new Map((s.pendingTiles||[]).map(t=>[`${t.row},${t.col}`,t]));}
-function clickAt(element){const w=element.ownerDocument.defaultView,rect=element.getBoundingClientRect();element.dispatchEvent(new w.MouseEvent('click',{bubbles:true,cancelable:true,view:w,detail:1,button:0,buttons:0,clientX:rect.left+rect.width/2,clientY:rect.top+rect.height/2}));}
+function clickAt(element) {
+ const root=element.getRootNode();
+ recordPlacement(root,{phase:'click',target:describeElement(element),method:typeof element.click==='function'?'HTMLElement.click':'composed MouseEvent'});
+ if(typeof element.click==='function')element.click();
+ else {const w=element.ownerDocument.defaultView,rect=element.getBoundingClientRect();element.dispatchEvent(new w.MouseEvent('click',{bubbles:true,cancelable:true,composed:true,view:w,detail:1,button:0,clientX:rect.left+rect.width/2,clientY:rect.top+rect.height/2}));}
+}
 function rackTile(cell) {
  return cell.matches('.tile,.racktile,.rack-tile,[data-letter],[data-tile]') ? cell : cell.querySelector('.tile,.racktile,.rack-tile,[data-letter],[data-tile]') || cell;
 }
@@ -56,7 +62,7 @@ export async function stageMove({read,move,expected,signal,onProgress=()=>{},onS
   for(const [coord,tile]of pendingMap(snapshot))if(!sameTile(tile,planned.get(coord)))throw Error('Different tiles are already staged. Recall them in the game before placing this move.');
   return snapshot;
  }
- let snapshot=checked();const counts=new Map();
+ let snapshot=checked();recordPlacement(snapshot.live.root,{phase:'start',word:move.word||'',tiles:planned.size});const counts=new Map();
  for(const letter of snapshot.rackSlots||[])if(letter)counts.set(letter,(counts.get(letter)||0)+1);
  for(const [coord,tile]of planned) {
   if(snapshot.board[tile.row][tile.col])throw Error('A destination square is occupied.');
@@ -75,15 +81,19 @@ export async function stageMove({read,move,expected,signal,onProgress=()=>{},onS
   if(!source?.isConnected)throw Error('The rack changed. Recalculate before placing.');
   onStep({phase:'select',letter:token,slot:index+1,row:tile.row,col:tile.col});
   if(!isSelected(source))clickAt(letterTarget(source,token));
-  // A client redraw can take several frames. Re-query its DOM instead of using
-  // a stale node or guessing when selection has completed with a fixed delay.
-  await until(()=>{
+  // Some clients mark selection using styles or internal state rather than a
+  // known CSS class. Give redraws time, but verify success on the actual board
+  // instead of refusing to send the second click because a CSS marker is absent.
+  const started=Date.now();let confirmed=false;
+  while(Date.now()-started<600) {
    snapshot=checked();source=snapshot.live.rack[index];
    if(snapshot.rackSlots[index]!==token)throw Error('The selected rack slot changed. Recalculate before placing.');
-   return source?.isConnected&&isSelected(source);
-  },{signal,message:`Could not select rack tile ${token} (slot ${index+1}). No destination was clicked. Tap the tile in the game, then retry Place in game.`});
+   if(source?.isConnected&&isSelected(source)){confirmed=true;break;}
+   await pause(40);
+  }
   snapshot=checked();
-  if(!isSelected(snapshot.live.rack[index]))throw Error('Rack selection was cleared. Placement stopped before clicking the board.');
+  if(snapshot.live.rack.some((cell,i)=>i!==index&&isSelected(cell)))throw Error('The game selected a different rack tile. Placement stopped before clicking the board.');
+  recordPlacement(snapshot.live.root,{phase:'selection',slot:index+1,letter:token,markerConfirmed:confirmed,source:describeElement(snapshot.live.rack[index])});
   const destination=snapshot.live.cells.find(cell=>cell.row===tile.row&&cell.col===tile.col)?.e;
   if(!destination?.isConnected)throw Error('The destination square disappeared.');
   onStep({phase:'destination',letter:tile.letter,slot:index+1,row:tile.row,col:tile.col});
@@ -96,8 +106,8 @@ export async function stageMove({read,move,expected,signal,onProgress=()=>{},onS
     return sameTile(pendingMap(read()).get(coord),tile);
    },{signal,message:`The blank-letter picker did not open for ${tile.letter}. Placement stopped.`});
   }
-  await until(()=>sameTile(pendingMap(checked()).get(coord),tile),{signal,message:`The game did not place ${tile.letter} at ${'ABCDEFGHIJKLMNO'[tile.row]}${tile.col+1}. Placement stopped; review the selected tile and board.`});
-  onProgress(++done,planned.size);await pause(55);
+  await until(()=>sameTile(pendingMap(checked()).get(coord),tile),{signal,message:`The game did not place ${tile.letter} at ${'ABCDEFGHIJKLMNO'[tile.row]}${tile.col+1}. Both clicks were sent. Placement stopped; use Settings → Copy detection report for diagnostics.`});
+  recordPlacement(snapshot.live.root,{phase:'verified',row:tile.row,col:tile.col,letter:tile.letter});onProgress(++done,planned.size);await pause(55);
  }
  snapshot=checked();if(pendingMap(snapshot).size!==planned.size)throw Error('The staged tiles do not match the move.');return snapshot;
 }
