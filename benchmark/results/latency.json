@@ -1,0 +1,908 @@
+{
+  "seed": 9274,
+  "method": "42 decisions per strategy, cold DAWG transition cache per solve, interleaved order over 14 TRAIN scenarios, three repeats, after other CPU-heavy jobs completed; no physical iPad claim",
+  "summary": {
+    "old": {
+      "generationMs": {
+        "median": 9.957084000000577,
+        "p90": 28.474323999999797,
+        "p95": 29.28571600000032,
+        "worst": 71.44261000000006,
+        "mean": 16.16818142857141
+      },
+      "strategyMs": {
+        "median": 51.615616000000045,
+        "p90": 196.08171599999997,
+        "p95": 225.60519899999963,
+        "worst": 470.8508459999998,
+        "mean": 100.32687902380952
+      },
+      "simulationMs": {
+        "median": 0,
+        "p90": 0,
+        "p95": 0,
+        "worst": 0,
+        "mean": 0
+      },
+      "totalMs": {
+        "median": 63.74884899999961,
+        "p90": 223.15819699999975,
+        "p95": 254.2230389999986,
+        "worst": 537.6498750000001,
+        "mean": 116.4961068571428
+      }
+    },
+    "optimized": {
+      "generationMs": {
+        "median": 10.081480999999712,
+        "p90": 27.729569999999512,
+        "p95": 29.004375000000003,
+        "worst": 70.7972179999997,
+        "mean": 16.046510166666604
+      },
+      "strategyMs": {
+        "median": 51.65136900000016,
+        "p90": 203.35689100000036,
+        "p95": 254.264844,
+        "worst": 456.6518670000005,
+        "mean": 99.4857311904763
+      },
+      "simulationMs": {
+        "median": 0.004968000000189932,
+        "p90": 0.009935000000041327,
+        "p95": 0.010344999999915672,
+        "worst": 0.024586999999996806,
+        "mean": 0.0066467619047248915
+      },
+      "totalMs": {
+        "median": 61.85578499999974,
+        "p90": 231.48677400000042,
+        "p95": 283.279174,
+        "worst": 527.449455,
+        "mean": 115.53274692857138
+      }
+    }
+  },
+  "rows": [
+    {
+      "name": "optimized",
+      "repeat": 0,
+      "position": "safe-vs-dangerous",
+      "generationMs": 29.004375000000003,
+      "strategyMs": 254.264844,
+      "simulationMs": 0.024586999999996806,
+      "totalMs": 283.279174,
+      "heapUsed": 20852640
+    },
+    {
+      "name": "old",
+      "repeat": 0,
+      "position": "safe-vs-dangerous",
+      "generationMs": 22.845627000000036,
+      "strategyMs": 196.08171599999997,
+      "simulationMs": 0,
+      "totalMs": 218.93002700000005,
+      "heapUsed": 24384744
+    },
+    {
+      "name": "old",
+      "repeat": 0,
+      "position": "TW-exposure",
+      "generationMs": 15.49024600000007,
+      "strategyMs": 70.151344,
+      "simulationMs": 0,
+      "totalMs": 85.64266199999997,
+      "heapUsed": 53318264
+    },
+    {
+      "name": "optimized",
+      "repeat": 0,
+      "position": "TW-exposure",
+      "generationMs": 11.939440999999988,
+      "strategyMs": 52.068970000000036,
+      "simulationMs": 0.020440999999891574,
+      "totalMs": 64.00875100000007,
+      "heapUsed": 55307392
+    },
+    {
+      "name": "optimized",
+      "repeat": 0,
+      "position": "DW-exposure",
+      "generationMs": 22.62424299999998,
+      "strategyMs": 59.73136299999999,
+      "simulationMs": 0.007210999999983869,
+      "totalMs": 82.35605599999997,
+      "heapUsed": 40021288
+    },
+    {
+      "name": "old",
+      "repeat": 0,
+      "position": "DW-exposure",
+      "generationMs": 16.88955599999997,
+      "strategyMs": 77.14457300000004,
+      "simulationMs": 0,
+      "totalMs": 94.03552100000002,
+      "heapUsed": 62416848
+    },
+    {
+      "name": "old",
+      "repeat": 0,
+      "position": "parallel-lane",
+      "generationMs": 9.752285000000029,
+      "strategyMs": 50.111117000000036,
+      "simulationMs": 0,
+      "totalMs": 59.864423999999985,
+      "heapUsed": 49095136
+    },
+    {
+      "name": "optimized",
+      "repeat": 0,
+      "position": "parallel-lane",
+      "generationMs": 10.208393000000001,
+      "strategyMs": 50.38870600000007,
+      "simulationMs": 0.010344999999915672,
+      "totalMs": 60.59747900000002,
+      "heapUsed": 100820600
+    },
+    {
+      "name": "old",
+      "repeat": 0,
+      "position": "front-hook",
+      "generationMs": 9.278820999999994,
+      "strategyMs": 27.408676000000128,
+      "simulationMs": 0,
+      "totalMs": 36.68839900000012,
+      "heapUsed": 61510248
+    },
+    {
+      "name": "optimized",
+      "repeat": 0,
+      "position": "front-hook",
+      "generationMs": 6.971350999999913,
+      "strategyMs": 27.912817000000132,
+      "simulationMs": 0.00720099999989543,
+      "totalMs": 34.88450899999998,
+      "heapUsed": 85606600
+    },
+    {
+      "name": "old",
+      "repeat": 0,
+      "position": "back-hook",
+      "generationMs": 8.922413000000006,
+      "strategyMs": 60.59498500000018,
+      "simulationMs": 0,
+      "totalMs": 69.51828999999998,
+      "heapUsed": 85505312
+    },
+    {
+      "name": "optimized",
+      "repeat": 0,
+      "position": "back-hook",
+      "generationMs": 8.935473000000002,
+      "strategyMs": 59.21647600000006,
+      "simulationMs": 0.009643999999980224,
+      "totalMs": 68.15232000000015,
+      "heapUsed": 83661784
+    },
+    {
+      "name": "old",
+      "repeat": 0,
+      "position": "blank-preservation",
+      "generationMs": 66.79837800000018,
+      "strategyMs": 470.8508459999998,
+      "simulationMs": 0,
+      "totalMs": 537.6498750000001,
+      "heapUsed": 74938640
+    },
+    {
+      "name": "optimized",
+      "repeat": 0,
+      "position": "blank-preservation",
+      "generationMs": 69.15720499999998,
+      "strategyMs": 429.8538460000002,
+      "simulationMs": 0.005287999999836757,
+      "totalMs": 499.01163199999996,
+      "heapUsed": 137246056
+    },
+    {
+      "name": "optimized",
+      "repeat": 0,
+      "position": "rack-leave",
+      "generationMs": 6.436564999999973,
+      "strategyMs": 26.66022800000019,
+      "simulationMs": 0.0019130000000586733,
+      "totalMs": 33.097033999999894,
+      "heapUsed": 143171168
+    },
+    {
+      "name": "old",
+      "repeat": 0,
+      "position": "rack-leave",
+      "generationMs": 6.036450999999943,
+      "strategyMs": 21.669323000000077,
+      "simulationMs": 0,
+      "totalMs": 27.706615000000056,
+      "heapUsed": 152878560
+    },
+    {
+      "name": "old",
+      "repeat": 0,
+      "position": "ahead-80",
+      "generationMs": 6.018884999999955,
+      "strategyMs": 22.147383999999875,
+      "simulationMs": 0,
+      "totalMs": 28.167129999999815,
+      "heapUsed": 162755328
+    },
+    {
+      "name": "optimized",
+      "repeat": 0,
+      "position": "ahead-80",
+      "generationMs": 10.35444200000029,
+      "strategyMs": 19.1033639999996,
+      "simulationMs": 0.004066999999849941,
+      "totalMs": 29.45802700000013,
+      "heapUsed": 172453896
+    },
+    {
+      "name": "old",
+      "repeat": 0,
+      "position": "behind-80",
+      "generationMs": 9.54932800000006,
+      "strategyMs": 19.271698000000015,
+      "simulationMs": 0,
+      "totalMs": 28.822038000000248,
+      "heapUsed": 181152200
+    },
+    {
+      "name": "optimized",
+      "repeat": 0,
+      "position": "behind-80",
+      "generationMs": 10.081480999999712,
+      "strategyMs": 22.61185400000022,
+      "simulationMs": 0.005077999999684835,
+      "totalMs": 32.693694999999934,
+      "heapUsed": 130332312
+    },
+    {
+      "name": "old",
+      "repeat": 0,
+      "position": "early",
+      "generationMs": 26.758496999999807,
+      "strategyMs": 223.16485599999987,
+      "simulationMs": 0,
+      "totalMs": 249.9245249999999,
+      "heapUsed": 169356864
+    },
+    {
+      "name": "optimized",
+      "repeat": 0,
+      "position": "early",
+      "generationMs": 28.129453000000012,
+      "strategyMs": 203.35689100000036,
+      "simulationMs": 0.004926999999952386,
+      "totalMs": 231.48677400000042,
+      "heapUsed": 205191744
+    },
+    {
+      "name": "optimized",
+      "repeat": 0,
+      "position": "midgame",
+      "generationMs": 8.123578999999609,
+      "strategyMs": 43.638678000000255,
+      "simulationMs": 0.003105000000232394,
+      "totalMs": 51.76260699999966,
+      "heapUsed": 218997896
+    },
+    {
+      "name": "old",
+      "repeat": 0,
+      "position": "midgame",
+      "generationMs": 11.919522000000143,
+      "strategyMs": 40.817133999999896,
+      "simulationMs": 0,
+      "totalMs": 52.73781800000006,
+      "heapUsed": 234271400
+    },
+    {
+      "name": "optimized",
+      "repeat": 0,
+      "position": "late",
+      "generationMs": 13.436439000000064,
+      "strategyMs": 51.65136900000016,
+      "simulationMs": 0.00461700000005294,
+      "totalMs": 65.08803900000021,
+      "heapUsed": 200481448
+    },
+    {
+      "name": "old",
+      "repeat": 0,
+      "position": "late",
+      "generationMs": 10.465499999999793,
+      "strategyMs": 58.64005700000007,
+      "simulationMs": 0,
+      "totalMs": 69.106538,
+      "heapUsed": 44143792
+    },
+    {
+      "name": "optimized",
+      "repeat": 0,
+      "position": "near-exact-endgame",
+      "generationMs": 13.233492999999726,
+      "strategyMs": 169.9307620000004,
+      "simulationMs": 0.003485000000182481,
+      "totalMs": 183.16450499999974,
+      "heapUsed": 89820472
+    },
+    {
+      "name": "old",
+      "repeat": 0,
+      "position": "near-exact-endgame",
+      "generationMs": 29.28571600000032,
+      "strategyMs": 157.00041399999964,
+      "simulationMs": 0,
+      "totalMs": 186.28844299999992,
+      "heapUsed": 87686744
+    },
+    {
+      "name": "optimized",
+      "repeat": 1,
+      "position": "safe-vs-dangerous",
+      "generationMs": 8.193103000000065,
+      "strategyMs": 169.2298740000001,
+      "simulationMs": 0.007771999999931722,
+      "totalMs": 177.42338700000028,
+      "heapUsed": 97220728
+    },
+    {
+      "name": "old",
+      "repeat": 1,
+      "position": "safe-vs-dangerous",
+      "generationMs": 9.22571999999991,
+      "strategyMs": 165.82420899999988,
+      "simulationMs": 0,
+      "totalMs": 175.05073999999968,
+      "heapUsed": 167260504
+    },
+    {
+      "name": "optimized",
+      "repeat": 1,
+      "position": "TW-exposure",
+      "generationMs": 9.08322599999974,
+      "strategyMs": 44.90271400000029,
+      "simulationMs": 0.0036260000001675508,
+      "totalMs": 53.98612000000003,
+      "heapUsed": 131681920
+    },
+    {
+      "name": "old",
+      "repeat": 1,
+      "position": "TW-exposure",
+      "generationMs": 8.109887999999955,
+      "strategyMs": 45.288636000000224,
+      "simulationMs": 0,
+      "totalMs": 53.39930499999991,
+      "heapUsed": 163457224
+    },
+    {
+      "name": "old",
+      "repeat": 1,
+      "position": "DW-exposure",
+      "generationMs": 15.914236000000074,
+      "strategyMs": 57.90175399999998,
+      "simulationMs": 0,
+      "totalMs": 73.81726200000003,
+      "heapUsed": 185622344
+    },
+    {
+      "name": "optimized",
+      "repeat": 1,
+      "position": "DW-exposure",
+      "generationMs": 15.246107999999822,
+      "strategyMs": 67.40955000000031,
+      "simulationMs": 0.004968000000189932,
+      "totalMs": 82.65597800000023,
+      "heapUsed": 17752952
+    },
+    {
+      "name": "optimized",
+      "repeat": 1,
+      "position": "parallel-lane",
+      "generationMs": 17.117518999999447,
+      "strategyMs": 56.70443900000009,
+      "simulationMs": 0.003845999999612104,
+      "totalMs": 73.8221279999998,
+      "heapUsed": 77409280
+    },
+    {
+      "name": "old",
+      "repeat": 1,
+      "position": "parallel-lane",
+      "generationMs": 17.800599000000147,
+      "strategyMs": 51.615616000000045,
+      "simulationMs": 0,
+      "totalMs": 69.41736700000001,
+      "heapUsed": 70348704
+    },
+    {
+      "name": "optimized",
+      "repeat": 1,
+      "position": "front-hook",
+      "generationMs": 6.785670999999638,
+      "strategyMs": 27.510130000000572,
+      "simulationMs": 0.002725000000282307,
+      "totalMs": 34.295930999999655,
+      "heapUsed": 93597680
+    },
+    {
+      "name": "old",
+      "repeat": 1,
+      "position": "front-hook",
+      "generationMs": 13.59916499999963,
+      "strategyMs": 26.352724000000308,
+      "simulationMs": 0,
+      "totalMs": 39.95250000000033,
+      "heapUsed": 59334472
+    },
+    {
+      "name": "old",
+      "repeat": 1,
+      "position": "back-hook",
+      "generationMs": 8.474027000000206,
+      "strategyMs": 58.8500640000002,
+      "simulationMs": 0,
+      "totalMs": 67.32499199999984,
+      "heapUsed": 59099480
+    },
+    {
+      "name": "optimized",
+      "repeat": 1,
+      "position": "back-hook",
+      "generationMs": 8.095366000000467,
+      "strategyMs": 52.78839499999958,
+      "simulationMs": 0.0037759999995614635,
+      "totalMs": 60.8839710000002,
+      "heapUsed": 121765360
+    },
+    {
+      "name": "optimized",
+      "repeat": 1,
+      "position": "blank-preservation",
+      "generationMs": 62.879910000000564,
+      "strategyMs": 406.805198,
+      "simulationMs": 0.009254000000510132,
+      "totalMs": 469.6854290000001,
+      "heapUsed": 172676496
+    },
+    {
+      "name": "old",
+      "repeat": 1,
+      "position": "blank-preservation",
+      "generationMs": 60.15928799999983,
+      "strategyMs": 419.4019619999999,
+      "simulationMs": 0,
+      "totalMs": 479.5621109999993,
+      "heapUsed": 115258912
+    },
+    {
+      "name": "old",
+      "repeat": 1,
+      "position": "rack-leave",
+      "generationMs": 7.898639999999432,
+      "strategyMs": 18.65408699999989,
+      "simulationMs": 0,
+      "totalMs": 26.55352799999946,
+      "heapUsed": 118475896
+    },
+    {
+      "name": "optimized",
+      "repeat": 1,
+      "position": "rack-leave",
+      "generationMs": 8.615459999999985,
+      "strategyMs": 23.22203399999944,
+      "simulationMs": 0.00911400000040885,
+      "totalMs": 31.837733999999728,
+      "heapUsed": 68180064
+    },
+    {
+      "name": "optimized",
+      "repeat": 1,
+      "position": "ahead-80",
+      "generationMs": 6.251054999999724,
+      "strategyMs": 23.301594000000478,
+      "simulationMs": 0.009353999999802909,
+      "totalMs": 29.552779999999984,
+      "heapUsed": 79546120
+    },
+    {
+      "name": "old",
+      "repeat": 1,
+      "position": "ahead-80",
+      "generationMs": 6.04081799999949,
+      "strategyMs": 22.67366800000036,
+      "simulationMs": 0,
+      "totalMs": 28.71521699999994,
+      "heapUsed": 90340688
+    },
+    {
+      "name": "optimized",
+      "repeat": 1,
+      "position": "behind-80",
+      "generationMs": 5.766163999999662,
+      "strategyMs": 22.89224699999977,
+      "simulationMs": 0.004496999999901163,
+      "totalMs": 28.658540999999786,
+      "heapUsed": 101424608
+    },
+    {
+      "name": "old",
+      "repeat": 1,
+      "position": "behind-80",
+      "generationMs": 5.974889000000076,
+      "strategyMs": 21.762502999999924,
+      "simulationMs": 0,
+      "totalMs": 27.73843400000078,
+      "heapUsed": 112255136
+    },
+    {
+      "name": "optimized",
+      "repeat": 1,
+      "position": "early",
+      "generationMs": 27.729569999999512,
+      "strategyMs": 200.5589910000008,
+      "simulationMs": 0.010935999999674095,
+      "totalMs": 228.28960300000017,
+      "heapUsed": 156792552
+    },
+    {
+      "name": "old",
+      "repeat": 1,
+      "position": "early",
+      "generationMs": 28.474323999999797,
+      "strategyMs": 194.68286100000023,
+      "simulationMs": 0,
+      "totalMs": 223.15819699999975,
+      "heapUsed": 127107696
+    },
+    {
+      "name": "optimized",
+      "repeat": 1,
+      "position": "midgame",
+      "generationMs": 7.522162000000208,
+      "strategyMs": 44.24319000000014,
+      "simulationMs": 0.004977000000508269,
+      "totalMs": 51.76549200000045,
+      "heapUsed": 143463016
+    },
+    {
+      "name": "old",
+      "repeat": 1,
+      "position": "midgame",
+      "generationMs": 7.618876999999884,
+      "strategyMs": 43.83849000000009,
+      "simulationMs": 0,
+      "totalMs": 51.45835799999986,
+      "heapUsed": 161123240
+    },
+    {
+      "name": "old",
+      "repeat": 1,
+      "position": "late",
+      "generationMs": 9.71679100000074,
+      "strategyMs": 48.77960999999959,
+      "simulationMs": 0,
+      "totalMs": 58.49748200000067,
+      "heapUsed": 192116208
+    },
+    {
+      "name": "optimized",
+      "repeat": 1,
+      "position": "late",
+      "generationMs": 12.168367000000217,
+      "strategyMs": 45.686055000000124,
+      "simulationMs": 0.005347999999685271,
+      "totalMs": 57.85457300000053,
+      "heapUsed": 157621464
+    },
+    {
+      "name": "optimized",
+      "repeat": 1,
+      "position": "near-exact-endgame",
+      "generationMs": 9.033019999999851,
+      "strategyMs": 130.50719899999967,
+      "simulationMs": 0.0029949999998279964,
+      "totalMs": 139.54044900000008,
+      "heapUsed": 197698760
+    },
+    {
+      "name": "old",
+      "repeat": 1,
+      "position": "near-exact-endgame",
+      "generationMs": 8.635409999999865,
+      "strategyMs": 151.8748660000001,
+      "simulationMs": 0,
+      "totalMs": 160.51151799999934,
+      "heapUsed": 44090608
+    },
+    {
+      "name": "optimized",
+      "repeat": 2,
+      "position": "safe-vs-dangerous",
+      "generationMs": 8.556962999999996,
+      "strategyMs": 172.6804859999993,
+      "simulationMs": 0.00657000000046537,
+      "totalMs": 181.23790999999983,
+      "heapUsed": 52182752
+    },
+    {
+      "name": "old",
+      "repeat": 2,
+      "position": "safe-vs-dangerous",
+      "generationMs": 10.306118999999853,
+      "strategyMs": 161.43832600000042,
+      "simulationMs": 0,
+      "totalMs": 171.74544700000024,
+      "heapUsed": 122152328
+    },
+    {
+      "name": "optimized",
+      "repeat": 2,
+      "position": "TW-exposure",
+      "generationMs": 11.630997000000207,
+      "strategyMs": 45.27713800000038,
+      "simulationMs": 0.0032950000004348112,
+      "totalMs": 56.90831600000001,
+      "heapUsed": 86457432
+    },
+    {
+      "name": "old",
+      "repeat": 2,
+      "position": "TW-exposure",
+      "generationMs": 8.269718999999895,
+      "strategyMs": 44.363930999999866,
+      "simulationMs": 0,
+      "totalMs": 52.63452200000029,
+      "heapUsed": 118295008
+    },
+    {
+      "name": "old",
+      "repeat": 2,
+      "position": "DW-exposure",
+      "generationMs": 14.59023900000011,
+      "strategyMs": 54.89222599999994,
+      "simulationMs": 0,
+      "totalMs": 69.48338599999988,
+      "heapUsed": 140439800
+    },
+    {
+      "name": "optimized",
+      "repeat": 2,
+      "position": "DW-exposure",
+      "generationMs": 15.732011000000057,
+      "strategyMs": 56.687872999999854,
+      "simulationMs": 0.0038660000000163564,
+      "totalMs": 72.42003399999976,
+      "heapUsed": 99868160
+    },
+    {
+      "name": "optimized",
+      "repeat": 2,
+      "position": "parallel-lane",
+      "generationMs": 9.686404999999468,
+      "strategyMs": 47.702565000000504,
+      "simulationMs": 0.0049179999996340484,
+      "totalMs": 57.389170999999806,
+      "heapUsed": 152438768
+    },
+    {
+      "name": "old",
+      "repeat": 2,
+      "position": "parallel-lane",
+      "generationMs": 11.405386999999791,
+      "strategyMs": 46.35542400000031,
+      "simulationMs": 0,
+      "totalMs": 57.76193299999977,
+      "heapUsed": 139258824
+    },
+    {
+      "name": "optimized",
+      "repeat": 2,
+      "position": "front-hook",
+      "generationMs": 7.645067000000381,
+      "strategyMs": 26.474137999999584,
+      "simulationMs": 0.004166000000623171,
+      "totalMs": 34.11939500000062,
+      "heapUsed": 162162688
+    },
+    {
+      "name": "old",
+      "repeat": 2,
+      "position": "front-hook",
+      "generationMs": 9.957084000000577,
+      "strategyMs": 25.756776000000173,
+      "simulationMs": 0,
+      "totalMs": 35.71468100000038,
+      "heapUsed": 128379576
+    },
+    {
+      "name": "old",
+      "repeat": 2,
+      "position": "back-hook",
+      "generationMs": 8.851926000000276,
+      "strategyMs": 54.89563099999941,
+      "simulationMs": 0,
+      "totalMs": 63.74884899999961,
+      "heapUsed": 190763064
+    },
+    {
+      "name": "optimized",
+      "repeat": 2,
+      "position": "back-hook",
+      "generationMs": 10.615044999999554,
+      "strategyMs": 55.63472600000023,
+      "simulationMs": 0.0036760000002686866,
+      "totalMs": 66.24989099999948,
+      "heapUsed": 189782456
+    },
+    {
+      "name": "old",
+      "repeat": 2,
+      "position": "blank-preservation",
+      "generationMs": 71.44261000000006,
+      "strategyMs": 426.526664,
+      "simulationMs": 0,
+      "totalMs": 497.97000600000047,
+      "heapUsed": 238153344
+    },
+    {
+      "name": "optimized",
+      "repeat": 2,
+      "position": "blank-preservation",
+      "generationMs": 70.7972179999997,
+      "strategyMs": 456.6518670000005,
+      "simulationMs": 0.009754999999131542,
+      "totalMs": 527.449455,
+      "heapUsed": 94744184
+    },
+    {
+      "name": "optimized",
+      "repeat": 2,
+      "position": "rack-leave",
+      "generationMs": 6.0275779999992665,
+      "strategyMs": 23.04653899999903,
+      "simulationMs": 0.0038860000004206086,
+      "totalMs": 29.074227999999493,
+      "heapUsed": 101061016
+    },
+    {
+      "name": "old",
+      "repeat": 2,
+      "position": "rack-leave",
+      "generationMs": 5.752813999999489,
+      "strategyMs": 22.47638999999981,
+      "simulationMs": 0,
+      "totalMs": 28.23038599999927,
+      "heapUsed": 111695008
+    },
+    {
+      "name": "old",
+      "repeat": 2,
+      "position": "ahead-80",
+      "generationMs": 5.858784000000014,
+      "strategyMs": 23.310798000000432,
+      "simulationMs": 0,
+      "totalMs": 29.170772999999826,
+      "heapUsed": 122223976
+    },
+    {
+      "name": "optimized",
+      "repeat": 2,
+      "position": "ahead-80",
+      "generationMs": 9.026970000000802,
+      "strategyMs": 18.202245000000403,
+      "simulationMs": 0.004535999998552143,
+      "totalMs": 27.229346000000078,
+      "heapUsed": 132714040
+    },
+    {
+      "name": "optimized",
+      "repeat": 2,
+      "position": "behind-80",
+      "generationMs": 9.194915000000037,
+      "strategyMs": 21.224221000000398,
+      "simulationMs": 0.004637000000002445,
+      "totalMs": 30.419606999999814,
+      "heapUsed": 82657144
+    },
+    {
+      "name": "old",
+      "repeat": 2,
+      "position": "behind-80",
+      "generationMs": 5.822448999999324,
+      "strategyMs": 21.013354000000618,
+      "simulationMs": 0,
+      "totalMs": 26.83663399999932,
+      "heapUsed": 91941608
+    },
+    {
+      "name": "optimized",
+      "repeat": 2,
+      "position": "early",
+      "generationMs": 27.644172000000253,
+      "strategyMs": 209.23631999999998,
+      "simulationMs": 0.009935000000041327,
+      "totalMs": 236.88067299999966,
+      "heapUsed": 134046288
+    },
+    {
+      "name": "old",
+      "repeat": 2,
+      "position": "early",
+      "generationMs": 28.616587999998956,
+      "strategyMs": 225.60519899999963,
+      "simulationMs": 0,
+      "totalMs": 254.2230389999986,
+      "heapUsed": 171081008
+    },
+    {
+      "name": "old",
+      "repeat": 2,
+      "position": "midgame",
+      "generationMs": 11.45365800000036,
+      "strategyMs": 44.75317599999835,
+      "simulationMs": 0,
+      "totalMs": 56.20798599999944,
+      "heapUsed": 184345048
+    },
+    {
+      "name": "optimized",
+      "repeat": 2,
+      "position": "midgame",
+      "generationMs": 11.9804720000011,
+      "strategyMs": 49.875183000000106,
+      "simulationMs": 0.009975000000849832,
+      "totalMs": 61.85578499999974,
+      "heapUsed": 139602096
+    },
+    {
+      "name": "old",
+      "repeat": 2,
+      "position": "late",
+      "generationMs": 12.438723000001119,
+      "strategyMs": 52.3475299999991,
+      "simulationMs": 0,
+      "totalMs": 64.78735500000039,
+      "heapUsed": 170540592
+    },
+    {
+      "name": "optimized",
+      "repeat": 2,
+      "position": "late",
+      "generationMs": 12.64695699999902,
+      "strategyMs": 54.5292100000006,
+      "simulationMs": 0.005477999999129679,
+      "totalMs": 67.17628700000023,
+      "heapUsed": 201148728
+    },
+    {
+      "name": "optimized",
+      "repeat": 2,
+      "position": "near-exact-endgame",
+      "generationMs": 9.646022999999332,
+      "strategyMs": 155.02642100000048,
+      "simulationMs": 0.009373999999297666,
+      "totalMs": 164.6725549999992,
+      "heapUsed": 233453648
+    },
+    {
+      "name": "old",
+      "repeat": 2,
+      "position": "near-exact-endgame",
+      "generationMs": 16.643622999999934,
+      "strategyMs": 187.43832100000145,
+      "simulationMs": 0,
+      "totalMs": 204.08217500000137,
+      "heapUsed": 92446128
+    }
+  ]
+}

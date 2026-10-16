@@ -1,6 +1,6 @@
 {
   "name": "islenska-bookmarklet",
-  "version": "4.0.0",
+  "version": "5.0.0",
   "private": true,
   "type": "module",
   "scripts": {
@@ -10,9 +10,16 @@
     "test:browser": "node scripts/browser-check.mjs",
     "test:live": "node scripts/live-moves-check.mjs",
     "test:client": "node scripts/client-check.mjs",
-    "benchmark": "node scripts/self-play.mjs",
+    "benchmark": "node benchmark/baseline.js",
     "test:strategy-browser": "node scripts/strategy-browser-check.mjs",
-    "benchmark:tune": "node scripts/tune.mjs"
+    "benchmark:tune": "node benchmark/pipeline.js",
+    "optimize-strategy": "node benchmark/pipeline.js",
+    "strategy-tournament": "node benchmark/tournament.js",
+    "benchmark-final": "node benchmark/final-test.js",
+    "benchmark:performance": "node benchmark/performance.js",
+    "benchmark:positions": "node benchmark/positions.js",
+    "benchmark:report": "node benchmark/report.js",
+    "benchmark:latency": "node benchmark/latency.js"
   },
   "devDependencies": {
     "@playwright/test": "^1.64.1",

@@ -1,0 +1,3 @@
+import fs from 'node:fs';import {optimize} from './search.js';import {tournament} from './tournament.js';import {finalists} from './finalists.js';import {finalize} from './finalize.js';
+if(fs.existsSync('benchmark/results/final-test.json'))throw Error('This experiment is sealed; use fresh holdout seeds for further optimization.');
+const report=JSON.parse(fs.readFileSync('benchmark/results/baseline.json'));if(report.summary.games!==100)throw Error('Complete the 100-game baseline first.');await optimize();await tournament();await finalists(); finalize(); // Final test is an explicit separate command after the selection lock.

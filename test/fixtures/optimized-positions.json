@@ -1,0 +1,381 @@
+[
+  {
+    "name": "front-hook",
+    "snapshot": {
+      "board": [
+        [
+          null,
+          null,
+          null,
+          null,
+          null,
+          null,
+          null,
+          null,
+          null,
+          null,
+          null,
+          null,
+          null,
+          null,
+          null
+        ],
+        [
+          null,
+          null,
+          null,
+          null,
+          null,
+          null,
+          null,
+          null,
+          null,
+          null,
+          null,
+          null,
+          null,
+          null,
+          null
+        ],
+        [
+          null,
+          null,
+          null,
+          null,
+          null,
+          null,
+          null,
+          null,
+          null,
+          null,
+          null,
+          null,
+          null,
+          null,
+          null
+        ],
+        [
+          null,
+          null,
+          null,
+          null,
+          null,
+          null,
+          null,
+          null,
+          null,
+          null,
+          null,
+          null,
+          null,
+          null,
+          null
+        ],
+        [
+          null,
+          null,
+          null,
+          null,
+          {
+            "letter": "Ó",
+            "blank": false
+          },
+          null,
+          null,
+          null,
+          null,
+          null,
+          null,
+          null,
+          null,
+          null,
+          null
+        ],
+        [
+          null,
+          null,
+          null,
+          null,
+          {
+            "letter": "L",
+            "blank": false
+          },
+          null,
+          null,
+          null,
+          null,
+          {
+            "letter": "D",
+            "blank": false
+          },
+          null,
+          null,
+          null,
+          null,
+          null
+        ],
+        [
+          null,
+          null,
+          null,
+          null,
+          {
+            "letter": "E",
+            "blank": false
+          },
+          null,
+          null,
+          null,
+          null,
+          {
+            "letter": "Á",
+            "blank": false
+          },
+          null,
+          null,
+          null,
+          null,
+          null
+        ],
+        [
+          null,
+          null,
+          {
+            "letter": "R",
+            "blank": false
+          },
+          {
+            "letter": "E",
+            "blank": false
+          },
+          {
+            "letter": "K",
+            "blank": false
+          },
+          {
+            "letter": "S",
+            "blank": false
+          },
+          {
+            "letter": "A",
+            "blank": false
+          },
+          {
+            "letter": "Ð",
+            "blank": false
+          },
+          {
+            "letter": "I",
+            "blank": false
+          },
+          {
+            "letter": "R",
+            "blank": false
+          },
+          null,
+          null,
+          null,
+          null,
+          null
+        ],
+        [
+          null,
+          null,
+          null,
+          null,
+          {
+            "letter": "K",
+            "blank": false
+          },
+          null,
+          null,
+          null,
+          null,
+          null,
+          null,
+          null,
+          null,
+          null,
+          null
+        ],
+        [
+          null,
+          null,
+          null,
+          {
+            "letter": "H",
+            "blank": false
+          },
+          {
+            "letter": "E",
+            "blank": false
+          },
+          {
+            "letter": "X",
+            "blank": false
+          },
+          {
+            "letter": "U",
+            "blank": false
+          },
+          {
+            "letter": "Ð",
+            "blank": false
+          },
+          null,
+          null,
+          null,
+          null,
+          null,
+          null,
+          null
+        ],
+        [
+          null,
+          null,
+          null,
+          null,
+          {
+            "letter": "R",
+            "blank": false
+          },
+          null,
+          null,
+          null,
+          null,
+          null,
+          null,
+          null,
+          null,
+          null,
+          null
+        ],
+        [
+          null,
+          null,
+          null,
+          null,
+          {
+            "letter": "U",
+            "blank": false
+          },
+          null,
+          null,
+          null,
+          null,
+          null,
+          null,
+          null,
+          null,
+          null,
+          null
+        ],
+        [
+          null,
+          null,
+          null,
+          null,
+          null,
+          null,
+          null,
+          null,
+          null,
+          null,
+          null,
+          null,
+          null,
+          null,
+          null
+        ],
+        [
+          null,
+          null,
+          null,
+          null,
+          null,
+          null,
+          null,
+          null,
+          null,
+          null,
+          null,
+          null,
+          null,
+          null,
+          null
+        ],
+        [
+          null,
+          null,
+          null,
+          null,
+          null,
+          null,
+          null,
+          null,
+          null,
+          null,
+          null,
+          null,
+          null,
+          null,
+          null
+        ]
+      ],
+      "rack": [
+        "I",
+        "T",
+        "R",
+        "V",
+        "I",
+        "J",
+        "R"
+      ],
+      "myScore": 200,
+      "opponentScore": 72,
+      "bagCount": 65
+    },
+    "expected": {
+      "word": "VITJIR",
+      "score": 34,
+      "placedTiles": [
+        {
+          "row": 2,
+          "column": 2,
+          "letter": "V",
+          "blank": false,
+          "col": 2
+        },
+        {
+          "row": 3,
+          "column": 2,
+          "letter": "I",
+          "blank": false,
+          "col": 2
+        },
+        {
+          "row": 4,
+          "column": 2,
+          "letter": "T",
+          "blank": false,
+          "col": 2
+        },
+        {
+          "row": 5,
+          "column": 2,
+          "letter": "J",
+          "blank": false,
+          "col": 2
+        },
+        {
+          "row": 6,
+          "column": 2,
+          "letter": "I",
+          "blank": false,
+          "col": 2
+        }
+      ]
+    },
+    "highestRawScore": 42
+  }
+]

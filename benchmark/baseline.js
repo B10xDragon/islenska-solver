@@ -1,0 +1,1 @@
+import {runGames,pairedTasks} from './run.js';import {OPPONENTS} from './game.js';const seeds=Array.from({length:10},(_,i)=>18473921+i);await runGames(pairedTasks({id:'old',legacy:true},Object.values(OPPONENTS),seeds,{record:true}),{file:'benchmark/results/baseline.json'});

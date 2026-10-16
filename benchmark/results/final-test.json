@@ -1,0 +1,86 @@
+{
+  "lockedAt": "2026-10-16T16:25:39.927Z",
+  "selected": "random-5",
+  "seeds": [
+    39473921,
+    39473922,
+    39473923,
+    39473924,
+    39473925,
+    39473926,
+    39473927,
+    39473928,
+    39473929,
+    39473930
+  ],
+  "old": {
+    "games": 100,
+    "truncated": 0,
+    "wins": 57,
+    "losses": 43,
+    "draws": 0,
+    "winRate": 0.57,
+    "winRateCI95": [
+      0.47215389549212305,
+      0.6626670147588988
+    ],
+    "averageScore": 543.83,
+    "averageOpponentScore": 538.32,
+    "averageScoreDifferential": 5.51,
+    "scoreDifferentialSD": 113.17866362526104,
+    "medianScoreDifferential": 15,
+    "gamesPerSecond": 0.4535567460463114,
+    "averageSolveMs": 197.89984606799348,
+    "medianSolveMs": 73.70833200000015,
+    "p90SolveMs": 523.8421680000029,
+    "p95SolveMs": 755.5901529999974,
+    "worstSolveMs": 10108.135865999997,
+    "pairedCI95": [
+      0.48,
+      0.66
+    ]
+  },
+  "optimized": {
+    "games": 100,
+    "truncated": 0,
+    "wins": 53,
+    "losses": 47,
+    "draws": 0,
+    "winRate": 0.53,
+    "winRateCI95": [
+      0.4328885697009936,
+      0.6248918204065872
+    ],
+    "averageScore": 504.79,
+    "averageOpponentScore": 505.7,
+    "averageScoreDifferential": -0.91,
+    "scoreDifferentialSD": 128.92122362124866,
+    "medianScoreDifferential": 8,
+    "gamesPerSecond": 0.5188644191253198,
+    "averageSolveMs": 184.4758550283336,
+    "medianSolveMs": 64.9162340000039,
+    "p90SolveMs": 484.39820299998973,
+    "p95SolveMs": 760.8971009999514,
+    "worstSolveMs": 20294.537864999962,
+    "pairedCI95": [
+      0.44,
+      0.61
+    ]
+  },
+  "pairedComparison": {
+    "winRateDifference": -0.04,
+    "winRateDifferenceCI95": [
+      -0.17,
+      0.09
+    ],
+    "scoreDifference": -6.42,
+    "scoreDifferenceCI95": [
+      -34.8,
+      21.52
+    ]
+  },
+  "improvement": {
+    "winRate": -0.039999999999999925,
+    "averageDifferential": -6.42
+  }
+}

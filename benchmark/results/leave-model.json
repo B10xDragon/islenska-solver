@@ -1,0 +1,566 @@
+{
+  "trainingGames": 100,
+  "observations": 2230,
+  "ridge": 120,
+  "method": "Ridge regression on next-turn score residuals within phase/leave-size strata; pair residuals shrink by n/(n+200), n>=30, bounded +/-2. Observational associations, not causal tile values.",
+  "values": {
+    "A": 0.01,
+    "Á": -0.244,
+    "B": 4.103,
+    "D": 0.002,
+    "Ð": -3.268,
+    "E": -1.33,
+    "É": -0.323,
+    "F": -2.619,
+    "G": -2.42,
+    "H": 0.68,
+    "I": -1.371,
+    "Í": -0.894,
+    "J": 1.06,
+    "K": 1.068,
+    "L": 0.666,
+    "M": -0.48,
+    "N": 0.938,
+    "O": 2.832,
+    "Ó": 4.498,
+    "P": -0.266,
+    "R": 2.799,
+    "S": 0.645,
+    "T": -0.136,
+    "U": -1.991,
+    "Ú": 1.071,
+    "V": -0.392,
+    "X": 0.169,
+    "Y": 1.638,
+    "Ý": -1.345,
+    "Þ": -2.551,
+    "Æ": -0.879,
+    "Ö": 0.669,
+    "?": 5.383
+  },
+  "pairs": {
+    "LÐ": -0.292,
+    "TÐ": -0.746,
+    "LT": -1.303,
+    "LR": -0.323,
+    "RT": 0.193,
+    "IR": -0.351,
+    "II": 0.969,
+    "RR": 0.956,
+    "NR": -0.029,
+    "ÆÐ": -0.447,
+    "IS": 1.053,
+    "SU": 0.379,
+    "AS": 0.417,
+    "SS": -1.042,
+    "IU": 0.846,
+    "AI": 0.279,
+    "AU": 0.991,
+    "AN": 1.353,
+    "NN": 0.956,
+    "IT": -1.111,
+    "IN": -0.621,
+    "AÆ": -0.472,
+    "AG": -1.005,
+    "GT": -0.903,
+    "AT": -0.205,
+    "TU": -1.309,
+    "NT": -1.703,
+    "FN": -0.442,
+    "RÐ": -0.061,
+    "UÐ": -0.496,
+    "LU": 0.851,
+    "RU": -1.003,
+    "LN": 1.15,
+    "KL": 0.694,
+    "KT": 2,
+    "KN": -1.608,
+    "RS": 0.481,
+    "AL": 0.341,
+    "AR": -1.392,
+    "AÐ": -0.232,
+    "AA": 0.359,
+    "SÐ": -0.665,
+    "GI": -1.225,
+    "NU": 0.777,
+    "NS": -1.278,
+    "AK": -0.585,
+    "KR": 1.315,
+    "KU": 0.295,
+    "NÐ": 0.08,
+    "MN": -1.436,
+    "AM": -1.607,
+    "IL": -0.663,
+    "KS": 0.792,
+    "EN": -1.534,
+    "AE": -0.364,
+    "ES": 0.149,
+    "AÓ": 0.76,
+    "NÓ": 0.01,
+    "IM": 1.173,
+    "IK": -0.121,
+    "KÐ": -0.771,
+    "LS": 0.862,
+    "UU": -1.479,
+    "EU": -0.661,
+    "UÆ": 0.084,
+    "EL": 0.509,
+    "MR": 0.601,
+    "KK": -1.143,
+    "GR": -0.496
+  },
+  "tileStats": {
+    "A": {
+      "n": 641,
+      "nextTurnScore": 43.399375975039,
+      "bingoProbability": 0.21060842433697347,
+      "passRate": 0,
+      "winProbability": 0.5834633385335414,
+      "regularizedValue": 0.01
+    },
+    "Á": {
+      "n": 39,
+      "nextTurnScore": 43.58974358974359,
+      "bingoProbability": 0.20512820512820512,
+      "passRate": 0,
+      "winProbability": 0.8461538461538461,
+      "regularizedValue": -0.244
+    },
+    "B": {
+      "n": 29,
+      "nextTurnScore": 66.62068965517241,
+      "bingoProbability": 0.4482758620689655,
+      "passRate": 0,
+      "winProbability": 0.5517241379310345,
+      "regularizedValue": 4.103
+    },
+    "D": {
+      "n": 25,
+      "nextTurnScore": 36.12,
+      "bingoProbability": 0,
+      "passRate": 0.04,
+      "winProbability": 0.56,
+      "regularizedValue": 0.002
+    },
+    "Ð": {
+      "n": 262,
+      "nextTurnScore": 39.20610687022901,
+      "bingoProbability": 0.12213740458015267,
+      "passRate": 0,
+      "winProbability": 0.5038167938931297,
+      "regularizedValue": -3.268
+    },
+    "E": {
+      "n": 191,
+      "nextTurnScore": 39.60732984293194,
+      "bingoProbability": 0.07853403141361257,
+      "passRate": 0,
+      "winProbability": 0.5863874345549738,
+      "regularizedValue": -1.33
+    },
+    "É": {
+      "n": 9,
+      "nextTurnScore": 39.22222222222222,
+      "bingoProbability": 0,
+      "passRate": 0,
+      "winProbability": 0.4444444444444444,
+      "regularizedValue": -0.323
+    },
+    "F": {
+      "n": 120,
+      "nextTurnScore": 34.31666666666667,
+      "bingoProbability": 0.09166666666666666,
+      "passRate": 0.008333333333333333,
+      "winProbability": 0.2916666666666667,
+      "regularizedValue": -2.619
+    },
+    "G": {
+      "n": 127,
+      "nextTurnScore": 40.92125984251968,
+      "bingoProbability": 0.08661417322834646,
+      "passRate": 0,
+      "winProbability": 0.4330708661417323,
+      "regularizedValue": -2.42
+    },
+    "H": {
+      "n": 66,
+      "nextTurnScore": 37.27272727272727,
+      "bingoProbability": 0.015151515151515152,
+      "passRate": 0,
+      "winProbability": 0.42424242424242425,
+      "regularizedValue": 0.68
+    },
+    "I": {
+      "n": 441,
+      "nextTurnScore": 41.321995464852606,
+      "bingoProbability": 0.16780045351473924,
+      "passRate": 0,
+      "winProbability": 0.4852607709750567,
+      "regularizedValue": -1.371
+    },
+    "Í": {
+      "n": 70,
+      "nextTurnScore": 36.27142857142857,
+      "bingoProbability": 0.014285714285714285,
+      "passRate": 0,
+      "winProbability": 0.5,
+      "regularizedValue": -0.894
+    },
+    "J": {
+      "n": 44,
+      "nextTurnScore": 46.63636363636363,
+      "bingoProbability": 0.1590909090909091,
+      "passRate": 0.09090909090909091,
+      "winProbability": 0.25,
+      "regularizedValue": 1.06
+    },
+    "K": {
+      "n": 233,
+      "nextTurnScore": 46.76824034334764,
+      "bingoProbability": 0.2918454935622318,
+      "passRate": 0,
+      "winProbability": 0.31759656652360513,
+      "regularizedValue": 1.068
+    },
+    "L": {
+      "n": 245,
+      "nextTurnScore": 41.02857142857143,
+      "bingoProbability": 0.17142857142857143,
+      "passRate": 0,
+      "winProbability": 0.4122448979591837,
+      "regularizedValue": 0.666
+    },
+    "M": {
+      "n": 160,
+      "nextTurnScore": 42.34375,
+      "bingoProbability": 0.21875,
+      "passRate": 0,
+      "winProbability": 0.45625,
+      "regularizedValue": -0.48
+    },
+    "N": {
+      "n": 452,
+      "nextTurnScore": 42.32964601769911,
+      "bingoProbability": 0.18584070796460178,
+      "passRate": 0,
+      "winProbability": 0.45132743362831856,
+      "regularizedValue": 0.938
+    },
+    "O": {
+      "n": 43,
+      "nextTurnScore": 55.76744186046512,
+      "bingoProbability": 0.27906976744186046,
+      "passRate": 0,
+      "winProbability": 0.6511627906976745,
+      "regularizedValue": 2.832
+    },
+    "Ó": {
+      "n": 110,
+      "nextTurnScore": 54.3,
+      "bingoProbability": 0.2909090909090909,
+      "passRate": 0,
+      "winProbability": 0.5545454545454546,
+      "regularizedValue": 4.498
+    },
+    "P": {
+      "n": 28,
+      "nextTurnScore": 34.357142857142854,
+      "bingoProbability": 0,
+      "passRate": 0.10714285714285714,
+      "winProbability": 0.5714285714285714,
+      "regularizedValue": -0.266
+    },
+    "R": {
+      "n": 429,
+      "nextTurnScore": 44.82051282051282,
+      "bingoProbability": 0.1888111888111888,
+      "passRate": 0,
+      "winProbability": 0.44755244755244755,
+      "regularizedValue": 2.799
+    },
+    "S": {
+      "n": 409,
+      "nextTurnScore": 45.15403422982885,
+      "bingoProbability": 0.20293398533007334,
+      "passRate": 0,
+      "winProbability": 0.4718826405867971,
+      "regularizedValue": 0.645
+    },
+    "T": {
+      "n": 298,
+      "nextTurnScore": 41.29194630872483,
+      "bingoProbability": 0.19463087248322147,
+      "passRate": 0,
+      "winProbability": 0.4563758389261745,
+      "regularizedValue": -0.136
+    },
+    "U": {
+      "n": 377,
+      "nextTurnScore": 41.824933687002655,
+      "bingoProbability": 0.14058355437665782,
+      "passRate": 0.005305039787798408,
+      "winProbability": 0.5358090185676393,
+      "regularizedValue": -1.991
+    },
+    "Ú": {
+      "n": 53,
+      "nextTurnScore": 49.24528301886792,
+      "bingoProbability": 0.16981132075471697,
+      "passRate": 0,
+      "winProbability": 0.7358490566037735,
+      "regularizedValue": 1.071
+    },
+    "V": {
+      "n": 33,
+      "nextTurnScore": 37.878787878787875,
+      "bingoProbability": 0,
+      "passRate": 0,
+      "winProbability": 0.8787878787878788,
+      "regularizedValue": -0.392
+    },
+    "X": {
+      "n": 14,
+      "nextTurnScore": 40.857142857142854,
+      "bingoProbability": 0,
+      "passRate": 0,
+      "winProbability": 0.8571428571428571,
+      "regularizedValue": 0.169
+    },
+    "Y": {
+      "n": 29,
+      "nextTurnScore": 46.58620689655172,
+      "bingoProbability": 0.1724137931034483,
+      "passRate": 0,
+      "winProbability": 0.06896551724137931,
+      "regularizedValue": 1.638
+    },
+    "Ý": {
+      "n": 18,
+      "nextTurnScore": 32.888888888888886,
+      "bingoProbability": 0,
+      "passRate": 0,
+      "winProbability": 0.7222222222222222,
+      "regularizedValue": -1.345
+    },
+    "Þ": {
+      "n": 46,
+      "nextTurnScore": 35.84782608695652,
+      "bingoProbability": 0.021739130434782608,
+      "passRate": 0.021739130434782608,
+      "winProbability": 0.41304347826086957,
+      "regularizedValue": -2.551
+    },
+    "Æ": {
+      "n": 154,
+      "nextTurnScore": 39.76623376623377,
+      "bingoProbability": 0.012987012987012988,
+      "passRate": 0,
+      "winProbability": 0.6103896103896104,
+      "regularizedValue": -0.879
+    },
+    "Ö": {
+      "n": 27,
+      "nextTurnScore": 37.629629629629626,
+      "bingoProbability": 0.07407407407407407,
+      "passRate": 0,
+      "winProbability": 0.3333333333333333,
+      "regularizedValue": 0.669
+    },
+    "?": {
+      "n": 25,
+      "nextTurnScore": 76.56,
+      "bingoProbability": 0.8,
+      "passRate": 0,
+      "winProbability": 0.8,
+      "regularizedValue": 5.383
+    }
+  },
+  "blankContexts": {
+    "EARLY|ahead|true": {
+      "n": 0,
+      "nextTurnScore": 0,
+      "bingoProbability": 0,
+      "winProbability": 0
+    },
+    "EARLY|ahead|false": {
+      "n": 129,
+      "nextTurnScore": 48.542635658914726,
+      "bingoProbability": 0.17054263565891473,
+      "winProbability": 0.9302325581395349
+    },
+    "EARLY|even|true": {
+      "n": 9,
+      "nextTurnScore": 89.88888888888889,
+      "bingoProbability": 1,
+      "winProbability": 1
+    },
+    "EARLY|even|false": {
+      "n": 245,
+      "nextTurnScore": 50.11020408163265,
+      "bingoProbability": 0.24897959183673468,
+      "winProbability": 0.6408163265306123
+    },
+    "EARLY|behind|true": {
+      "n": 0,
+      "nextTurnScore": 0,
+      "bingoProbability": 0,
+      "winProbability": 0
+    },
+    "EARLY|behind|false": {
+      "n": 329,
+      "nextTurnScore": 47.51975683890578,
+      "bingoProbability": 0.2066869300911854,
+      "winProbability": 0.270516717325228
+    },
+    "MIDGAME|ahead|true": {
+      "n": 3,
+      "nextTurnScore": 71.66666666666667,
+      "bingoProbability": 0.6666666666666666,
+      "winProbability": 1
+    },
+    "MIDGAME|ahead|false": {
+      "n": 295,
+      "nextTurnScore": 46.813559322033896,
+      "bingoProbability": 0.16271186440677965,
+      "winProbability": 0.9525423728813559
+    },
+    "MIDGAME|even|true": {
+      "n": 1,
+      "nextTurnScore": 158,
+      "bingoProbability": 1,
+      "winProbability": 1
+    },
+    "MIDGAME|even|false": {
+      "n": 153,
+      "nextTurnScore": 46.98692810457516,
+      "bingoProbability": 0.1830065359477124,
+      "winProbability": 0.5686274509803921
+    },
+    "MIDGAME|behind|true": {
+      "n": 8,
+      "nextTurnScore": 70.5,
+      "bingoProbability": 0.875,
+      "winProbability": 0.625
+    },
+    "MIDGAME|behind|false": {
+      "n": 509,
+      "nextTurnScore": 51.50687622789784,
+      "bingoProbability": 0.2966601178781925,
+      "winProbability": 0.19842829076620824
+    },
+    "LATE|ahead|true": {
+      "n": 1,
+      "nextTurnScore": 31,
+      "bingoProbability": 0,
+      "winProbability": 1
+    },
+    "LATE|ahead|false": {
+      "n": 118,
+      "nextTurnScore": 40.016949152542374,
+      "bingoProbability": 0.059322033898305086,
+      "winProbability": 1
+    },
+    "LATE|even|true": {
+      "n": 0,
+      "nextTurnScore": 0,
+      "bingoProbability": 0,
+      "winProbability": 0
+    },
+    "LATE|even|false": {
+      "n": 41,
+      "nextTurnScore": 52.1219512195122,
+      "bingoProbability": 0.2926829268292683,
+      "winProbability": 0.9024390243902439
+    },
+    "LATE|behind|true": {
+      "n": 2,
+      "nextTurnScore": 58.5,
+      "bingoProbability": 0.5,
+      "winProbability": 0.5
+    },
+    "LATE|behind|false": {
+      "n": 176,
+      "nextTurnScore": 35.17045454545455,
+      "bingoProbability": 0.028409090909090908,
+      "winProbability": 0.07386363636363637
+    },
+    "ENDGAME|ahead|true": {
+      "n": 0,
+      "nextTurnScore": 0,
+      "bingoProbability": 0,
+      "winProbability": 0
+    },
+    "ENDGAME|ahead|false": {
+      "n": 91,
+      "nextTurnScore": 17.34065934065934,
+      "bingoProbability": 0,
+      "winProbability": 1
+    },
+    "ENDGAME|even|true": {
+      "n": 0,
+      "nextTurnScore": 0,
+      "bingoProbability": 0,
+      "winProbability": 0
+    },
+    "ENDGAME|even|false": {
+      "n": 16,
+      "nextTurnScore": 11.8125,
+      "bingoProbability": 0,
+      "winProbability": 0.8125
+    },
+    "ENDGAME|behind|true": {
+      "n": 1,
+      "nextTurnScore": 20,
+      "bingoProbability": 0,
+      "winProbability": 0
+    },
+    "ENDGAME|behind|false": {
+      "n": 103,
+      "nextTurnScore": 14.74757281553398,
+      "bingoProbability": 0,
+      "winProbability": 0.019417475728155338
+    }
+  },
+  "correlations": {
+    "TW": {
+      "n": 2320,
+      "pearson": 0.007924678592870806
+    },
+    "DW": {
+      "n": 2320,
+      "pearson": 0.1147562178681795
+    },
+    "TL": {
+      "n": 2320,
+      "pearson": 0.07973085515447896
+    },
+    "DL": {
+      "n": 2320,
+      "pearson": -0.004554016753392497
+    },
+    "hooks": {
+      "n": 2320,
+      "pearson": -0.0661360530846288
+    },
+    "frontHooks": {
+      "n": 2320,
+      "pearson": -0.08449056901266686
+    },
+    "backHooks": {
+      "n": 2320,
+      "pearson": -0.004392859374312235
+    },
+    "parallel": {
+      "n": 2320,
+      "pearson": 0.1327855930528798
+    },
+    "anchors": {
+      "n": 2320,
+      "pearson": 0.14451940994694645
+    },
+    "longLanes": {
+      "n": 2320,
+      "pearson": 0.05097509866931827
+    }
+  }
+}
