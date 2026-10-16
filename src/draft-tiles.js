@@ -1,12 +1,12 @@
 import {ALPHABET, normalize} from './dictionary.js';
 
 function tileElement(cell) {
-  return cell.querySelector('.tile,.racktile,.rack-tile,[data-letter],[data-tile]') || cell;
+  return cell.querySelector('.netskrafl-tile,.tile,.racktile,.rack-tile,[data-letter],[data-tile]') || cell;
 }
 
 export function explicitDraft(cell) {
   return cell.matches('[data-pending="true"],[data-committed="false"],[data-state="pending"],[data-status="pending"],.pending-tile,.tentative,.uncommitted') ||
-    !!cell.querySelector('.racktile,.rack-tile,[draggable="true"],[data-pending="true"],[data-committed="false"],.pending-tile,.tentative,.uncommitted') ||
+    !!cell.querySelector('.netskrafl-racktile,.racktile,.rack-tile,[draggable="true"],[data-pending="true"],[data-committed="false"],.pending-tile,.tentative,.uncommitted') ||
     cell.getAttribute('draggable') === 'true';
 }
 

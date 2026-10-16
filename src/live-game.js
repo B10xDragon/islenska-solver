@@ -23,7 +23,28 @@ function clickAt(element) {
  else {const w=element.ownerDocument.defaultView,rect=element.getBoundingClientRect();element.dispatchEvent(new w.MouseEvent('click',{bubbles:true,cancelable:true,composed:true,view:w,detail:1,button:0,clientX:rect.left+rect.width/2,clientY:rect.top+rect.height/2}));}
 }
 function rackTile(cell) {
- return cell.matches('.tile,.racktile,.rack-tile,[data-letter],[data-tile]') ? cell : cell.querySelector('.tile,.racktile,.rack-tile,[data-letter],[data-tile]') || cell;
+ return cell.matches('.netskrafl-tile,.tile,.racktile,.rack-tile,[data-letter],[data-tile]') ? cell : cell.querySelector('.netskrafl-tile,.tile,.racktile,.rack-tile,[data-letter],[data-tile]') || cell;
+}
+async function selectRackTile(cell,token,signal) {
+ abort(signal);const tile=rackTile(cell);
+ if(!tile.classList.contains('netskrafl-tile')){clickAt(letterTarget(cell,token));return false;}
+ const doc=tile.ownerDocument,w=doc.defaultView,rect=tile.getBoundingClientRect();
+ const options={bubbles:true,cancelable:true,composed:true,view:w,button:0,clientX:rect.left+rect.width/2,clientY:rect.top+rect.height/2};
+ recordPlacement(doc,{phase:'rack-press',event:'mousedown',target:describeElement(tile)});
+ try {
+  tile.dispatchEvent(new w.MouseEvent('mousedown',{...options,buttons:1}));
+  // Complete the pair in one task. A redraw or unrelated mousemove between
+  // them can turn a simple selection into a drag in this client.
+ } finally {
+  // The shipped client completes a click in its document-level mouseup handler.
+  // Always release, including cancellation, so its drag controller is cleaned up.
+  doc.dispatchEvent(new w.MouseEvent('mouseup',{...options,buttons:0}));
+  recordPlacement(doc,{phase:'rack-release',event:'mouseup',target:describeElement(tile)});
+  // Consume the client's one-shot click stopper, which keeps this compatibility
+  // click from reaching the rack square and clearing the selection just made.
+  clickAt(tile);
+ }
+ abort(signal);return true;
 }
 function isSelected(cell) {
  const selector='.sel,.selected,.is-selected,.selected-tile,[aria-selected="true"],[aria-pressed="true"],[data-selected="true"]';
@@ -80,18 +101,20 @@ export async function stageMove({read,move,expected,signal,onProgress=()=>{},onS
   let source=snapshot.live.rack[index];
   if(!source?.isConnected)throw Error('The rack changed. Recalculate before placing.');
   onStep({phase:'select',letter:token,slot:index+1,row:tile.row,col:tile.col});
-  if(!isSelected(source))clickAt(letterTarget(source,token));
+  const pressClient=rackTile(source).classList.contains('netskrafl-tile');
+  if(!isSelected(source))await selectRackTile(source,token,signal);
   // Some clients mark selection using styles or internal state rather than a
   // known CSS class. Give redraws time, but verify success on the actual board
   // instead of refusing to send the second click because a CSS marker is absent.
   const started=Date.now();let confirmed=false;
-  while(Date.now()-started<600) {
+  while(Date.now()-started<(pressClient?3500:600)) {
    snapshot=checked();source=snapshot.live.rack[index];
    if(snapshot.rackSlots[index]!==token)throw Error('The selected rack slot changed. Recalculate before placing.');
    if(source?.isConnected&&isSelected(source)){confirmed=true;break;}
    await pause(40);
   }
   snapshot=checked();
+  if(pressClient&&!isSelected(snapshot.live.rack[index]))throw Error(`The game did not select ${token} after press and release. Placement stopped before clicking the board.`);
   if(snapshot.live.rack.some((cell,i)=>i!==index&&isSelected(cell)))throw Error('The game selected a different rack tile. Placement stopped before clicking the board.');
   recordPlacement(snapshot.live.root,{phase:'selection',slot:index+1,letter:token,markerConfirmed:confirmed,source:describeElement(snapshot.live.rack[index])});
   const destination=snapshot.live.cells.find(cell=>cell.row===tile.row&&cell.col===tile.col)?.e;
