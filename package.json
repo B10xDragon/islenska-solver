@@ -1,6 +1,6 @@
 {
   "name": "islenska-bookmarklet",
-  "version": "5.1.1",
+  "version": "5.2.0",
   "private": true,
   "type": "module",
   "scripts": {
@@ -19,9 +19,7 @@
     "benchmark:performance": "node benchmark/performance.js",
     "benchmark:positions": "node benchmark/positions.js",
     "benchmark:report": "node benchmark/report.js",
-    "benchmark:latency": "node benchmark/latency.js",
-    "test:reporting-browser": "node scripts/reporting-browser-check.mjs",
-    "test:reporting-moves": "node scripts/reporting-moves-check.mjs"
+    "benchmark:latency": "node benchmark/latency.js"
   },
   "devDependencies": {
     "@playwright/test": "^1.64.1",
