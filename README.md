@@ -1,6 +1,6 @@
 # Íslenska Solver — iPad Safari bookmarklet
 
-The primary product is the one-line `javascript:` URL in `dist/bookmarklet.txt`. Version **5.1.0** adds optional Discord notifications while retaining the v5 strategy behind **one small draggable button** in the top-right corner. Hold the button for settings and explanations. It starts **OFF**. Tap **ON** to enable both automatic placement and **Leika** submission. Tap **OFF** to cancel remaining placement/submission steps. Passing, exchanging and resigning stay manual.
+The primary product is the one-line `javascript:` URL in `dist/bookmarklet.txt`. Version **5.1.1** adds optional Discord notifications while retaining the v5 strategy behind **one small draggable button** in the top-right corner. Hold the button for settings and explanations. It starts **OFF**. Tap **ON** to enable both automatic placement and **Leika** submission. Tap **OFF** to cancel remaining placement/submission steps. Passing, exchanging and resigning stay manual.
 
 ## Install on iPad
 
@@ -20,7 +20,7 @@ Hold AUTO to open settings → **Discord reporting**. Reporting starts **OFF on 
 
 Only when either displayed username equals `jonsolvi12` (case-insensitive, exact after trimming display whitespace), a confirmed bot move can send: bot user, opponent, which role matched, word, actual move points, UTC timestamp and bot version. Local/opponent roles follow the client's public player-color markers, not left/right order. Missing or ambiguous names suppress real reporting. Detection uses visible DOM text only. No account identifiers, game URL, cookies, rack, board or hidden player data are included in the Discord embed.
 
-The hook runs after a verified Leika click and waits up to 20 seconds for the move's new tiles to appear committed in the same game. Staged, rejected and unconfirmed moves are not reported. Reporting errors never interrupt solving, placement or submission. Turning reporting OFF, hiding or destroying the bookmarklet cancels future reports; a request already dispatched cannot be recalled. Closing the reporting tab stops delivery. Safari suspension may delay or prevent delivery; the UI does not claim success without a successful Discord response.
+The hook runs after a verified Leika click and waits up to 60 seconds for the move's new tiles to appear committed in the same game. When the embedded view exposes no game UUID, confirmation is tied to the same connected visible board and page. Existing committed letters must remain unchanged. Missing names can be read after the commit; waiting and skip reasons are shown in the reporting status. Staged, rejected and unconfirmed moves are not reported. Reporting errors never interrupt solving, placement or submission. Turning reporting OFF, hiding or destroying the bookmarklet cancels future reports; a request already dispatched cannot be recalled. Closing the reporting tab stops delivery. Safari suspension may delay or prevent delivery; the UI does not claim success without a successful Discord response.
 
 **Test with mock usernames** has an explicit test-mode checkbox, editable mock names, Bot matches / Opponent matches / Neither matches presets, and **Send test notification**. Consent is still required. Tests use PRÓF / 0 points with a TEST label; mock names never replace real detected names. Neither-matches tests send nothing. Automated browser checks mock Discord unless `ISLENSKA_DISCORD_REAL=1` is explicitly set.
 
@@ -87,7 +87,7 @@ All raw games, traces, confidence intervals, learned leave values, prediction/ca
 
 GitHub Pages: https://b10xdragon.github.io/islenska-solver/
 
-Málstaður allows `cdn.jsdelivr.net` scripts but blocks GitHub Pages scripts/frames. The small bookmarklet therefore loads the immutable GitHub release **v5.1.0** through jsDelivr. The single button uses Shadow DOM and bundled styles, without a hosted iframe.
+Málstaður allows `cdn.jsdelivr.net` scripts but blocks GitHub Pages scripts/frames. The small bookmarklet therefore loads the immutable GitHub release **v5.1.1** through jsDelivr. The single button uses Shadow DOM and bundled styles, without a hosted iframe.
 
 The dictionary loads lazily when you first enable automation. The original compact DAWG is decoded from the permitted dictionary data script and saved in IndexedDB on the current page origin. Future launches reuse the cache. A bundled-source blob Web Worker handles searches; if unavailable, cooperative execution yields every 2,048 node visits.
 

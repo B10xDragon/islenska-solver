@@ -1,4 +1,4 @@
-import {matchedPlayers,committedMove} from './reporting-data.js';
+import {matchedPlayers,committedMove,sameReportingGame} from './reporting-data.js';
 import {REPORT_WEBHOOK} from './reporting-config.js';
 export function createReporter({window:w,read,version,reportUrl,onChange=()=>{}}){
  let enabled=false,bridge=null,ready=false,dead=false,status='Reporting OFF. No player information is transmitted.',generation=0;
@@ -14,7 +14,29 @@ export function createReporter({window:w,read,version,reportUrl,onChange=()=>{}}
  async function send(fields,id){if(!enabled||dead||!matchedPlayers(fields).length)return {skipped:true};if(!ready||!bridge||bridge.closed){publish('Reporting tab unavailable. Open it before the next move; no notification sent.');return {skipped:true};}
  if(seen.has(id))return {duplicate:true};seen.add(id);publish('Sending Discord notification…');
  return new Promise(resolve=>{const timer=w.setTimeout(()=>{waiters.delete(id);publish('No delivery confirmation. This event will not be retried to avoid duplicates.');resolve({unknown:true});},20000);waiters.set(id,{resolve,timer});post({type:'report',id,fields:{...fields,version,timestamp:new Date().toISOString()}});});}
- async function observeSubmission({snapshot,move,key}){if(!enabled||!matchedPlayers(snapshot).length||!snapshot.botUser||!snapshot.opponent)return;const epoch=generation,start=Date.now();
- const check=async()=>{if(dead||!enabled||epoch!==generation)return;const after=read();if(after.gameId!==snapshot.gameId)return;if(committedMove(snapshot,after,move)){const bytes=new TextEncoder().encode(snapshot.gameId+'|'+key+'|'+JSON.stringify(move.placedTiles));const digest=await w.crypto.subtle.digest('SHA-256',bytes);if(epoch!==generation||!enabled)return;const id=Array.from(new Uint8Array(digest),b=>b.toString(16).padStart(2,'0')).join('');return send({botUser:snapshot.botUser,opponent:snapshot.opponent,word:move.word,points:move.score},id);}if(Date.now()-start>=20000){publish('No confirmed committed move observed. No notification sent.');return;}const timer=w.setTimeout(()=>{timers.delete(timer);void check().catch(()=>publish('Could not confirm move for reporting.'));},250);timers.add(timer);};return check();}
+ async function observeSubmission({snapshot,move,key}){
+  if(!enabled||dead)return;
+  if(snapshot.botUser&&snapshot.opponent&&!matchedPlayers(snapshot).length){publish('No notification: neither displayed username matches jonsolvi12.');return;}
+  const epoch=generation,start=Date.now();
+  publish(snapshot.botUser&&snapshot.opponent?'Move submitted. Waiting for committed tiles before reporting…':'Move submitted. Waiting for both displayed usernames and committed tiles…');
+  const check=async()=>{
+   if(dead||!enabled||epoch!==generation)return;
+   const after=read();
+   if(after.detected&&!sameReportingGame(snapshot,after)){publish('The displayed game changed. No notification sent.');return;}
+   const players={botUser:snapshot.botUser||after.botUser,opponent:snapshot.opponent||after.opponent};
+   if(players.botUser&&players.opponent&&!matchedPlayers(players).length){publish('No notification: neither displayed username matches jonsolvi12.');return;}
+   if(players.botUser&&players.opponent&&committedMove(snapshot,after,move)){
+    const identity=snapshot.gameId||JSON.stringify([snapshot.live.pageUrl,players.botUser,players.opponent]);
+    const bytes=new TextEncoder().encode(identity+'|'+key+'|'+JSON.stringify(move.placedTiles));
+    const digest=await w.crypto.subtle.digest('SHA-256',bytes);
+    if(epoch!==generation||!enabled)return;
+    const id=Array.from(new Uint8Array(digest),b=>b.toString(16).padStart(2,'0')).join('');
+    return send({...players,word:move.word,points:move.score},id);
+   }
+   if(Date.now()-start>=60000){publish(!players.botUser||!players.opponent?'No notification: one or both displayed usernames could not be read.':'No confirmed committed move observed within 60 seconds. No notification sent.');return;}
+   const timer=w.setTimeout(()=>{timers.delete(timer);void check().catch(()=>publish('Could not confirm move for reporting.'));},250);timers.add(timer);
+  };return check();
+ }
+
  return {getState:state,setEnabled,connect,observeSubmission,test({botUser,opponent}){if(!enabled){publish('Enable reporting before sending a test.');return Promise.resolve({skipped:true});}if(!matchedPlayers({botUser,opponent}).length){publish('Neither mock username matches jonsolvi12. Nothing sent.');return Promise.resolve({skipped:true});}const id='test-'+Array.from(w.crypto.getRandomValues(new Uint32Array(4)),x=>x.toString(16)).join('-');return send({botUser,opponent,word:'PRÓF',points:0,test:true},id);},destroy(){setEnabled(false);dead=true;w.removeEventListener('message',receive);for(const p of waiters.values()){w.clearTimeout(p.timer);p.resolve({cancelled:true});}waiters.clear();}};
 }
