@@ -1,5 +1,5 @@
 import {positionKey,watchGame} from './live-game.js';
-export function createAutomation({read,search,stage,submit,doc,onState=()=>{},watch=watchGame,getOptions=()=>({})}) {
+export function createAutomation({read,search,stage,submit,doc,onState=()=>{},watch=watchGame,getOptions=()=>({}),onSubmitted=()=>{}}) {
  let state={enabled:false,phase:'off',message:'Auto place and Leika OFF',bestMove:null,stats:null},watcher=null,active=null,destroyed=false,generation=0,plan=null;
  const attempted=new Set();
  function publish(phase,message,extra={}){state={...state,phase,message,...extra};onState({...state});}
@@ -24,7 +24,8 @@ export function createAutomation({read,search,stage,submit,doc,onState=()=>{},wa
     if(!move){attempted.add(key);publish('waiting',state.result?.endgame?.pass?'Endgame recommends passing. Pass manually.':'No legal move available.');return;}
     plan={key,move};publish('preview',`${move.word} · ${move.score} points · rating ${move.evaluation??move.score}`);await new Promise(r=>setTimeout(r,350));checked();attempted.add(key);checked();publish('placing',`Placing ${move.word} · ${move.score} points`);
     await stage({move,expected:key,signal:task.controller.signal,onProgress:(done,total)=>{if(valid())publish('placing',`Placing ${move.word}: ${done}/${total}`);}});checked();
-    publish('submitting','Waiting for Leika…');await submit({move,expected:key,signal:task.controller.signal,isEnabled:valid});
+    publish('submitting','Waiting for Leika…');const submission=await submit({move,expected:key,signal:task.controller.signal,isEnabled:valid});
+    if(submission?.clicked)Promise.resolve().then(()=>onSubmitted({snapshot,move,key})).catch(()=>{});
     if(valid())publish('waiting',`${move.word} submitted. Waiting for the next turn.`);
    }catch(error){if(valid()){attempted.add(key);publish('error',error.message);}}
    finally{if(active===task)active=null;if(!destroyed&&state.enabled)consider(read());}

@@ -1,6 +1,6 @@
 # Íslenska Solver — iPad Safari bookmarklet
 
-The primary product is the one-line `javascript:` URL in `dist/bookmarklet.txt`. Version **5.0.0** adds empirically selected strategic parameters behind **one small draggable button** in the top-right corner. Hold the button for settings and explanations. It starts **OFF**. Tap **ON** to enable both automatic placement and **Leika** submission. Tap **OFF** to cancel remaining placement/submission steps. Passing, exchanging and resigning stay manual.
+The primary product is the one-line `javascript:` URL in `dist/bookmarklet.txt`. Version **5.1.0** adds optional Discord notifications while retaining the v5 strategy behind **one small draggable button** in the top-right corner. Hold the button for settings and explanations. It starts **OFF**. Tap **ON** to enable both automatic placement and **Leika** submission. Tap **OFF** to cancel remaining placement/submission steps. Passing, exchanging and resigning stay manual.
 
 ## Install on iPad
 
@@ -13,6 +13,20 @@ The primary product is the one-line `javascript:` URL in `dist/bookmarklet.txt`.
 7. Tap the **AUTO OFF** button to switch both placement and Leika **ON**.
 
 Drag the button to move it; dragging does not toggle automation. Its 96×48px touch target stays within the visible viewport after rotation, zoom or keyboard changes. The strategy panel stays collapsed until you hold the button; its Top moves list is separately expandable. Tap the bookmark again to hide and switch OFF; tap again to show. Each fresh launch starts OFF, even if an older release saved enabled preferences. The loader upgrades older releases and prevents duplicate buttons.
+
+## Optional Discord reporting
+
+Hold AUTO to open settings → **Discord reporting**. Reporting starts **OFF on every launch**. Check the consent box to enable it for this session. Safari opens a visible reporting tab on GitHub Pages; keep that tab open and return to your game. Málstaður's CSP blocks direct Discord requests and external frames, so the separate tab performs the opted-in delivery. No server-side proxy is involved. If Safari blocks the tab, tap **Open reporting tab**. `AUTO · R` indicates reporting is enabled.
+
+Only when either displayed username equals `jonsolvi12` (case-insensitive, exact after trimming display whitespace), a confirmed bot move can send: bot user, opponent, which role matched, word, actual move points, UTC timestamp and bot version. Local/opponent roles follow the client's public player-color markers, not left/right order. Missing or ambiguous names suppress real reporting. Detection uses visible DOM text only. No account identifiers, game URL, cookies, rack, board or hidden player data are included in the Discord embed.
+
+The hook runs after a verified Leika click and waits up to 20 seconds for the move's new tiles to appear committed in the same game. Staged, rejected and unconfirmed moves are not reported. Reporting errors never interrupt solving, placement or submission. Turning reporting OFF, hiding or destroying the bookmarklet cancels future reports; a request already dispatched cannot be recalled. Closing the reporting tab stops delivery. Safari suspension may delay or prevent delivery; the UI does not claim success without a successful Discord response.
+
+**Test with mock usernames** has an explicit test-mode checkbox, editable mock names, Bot matches / Opponent matches / Neither matches presets, and **Send test notification**. Consent is still required. Tests use PRÓF / 0 points with a TEST label; mock names never replace real detected names. Neither-matches tests send nothing. Automated browser checks mock Discord unless `ISLENSKA_DISCORD_REAL=1` is explicitly set.
+
+Duplicate prevention reserves a move-event hash in the reporting origin's IndexedDB before dispatch, including across helper reloads and tabs. It stores no player names or board contents. Failed/uncertain deliveries are not automatically retried, favoring at-most-once delivery over duplicates. If that storage is unavailable, reporting fails closed. Clearing site storage also clears deduplication history. The visible reporting tab includes its own OFF button. Messages between the tabs validate the opener, origin and random session token; Discord embeds disable mentions.
+
+The owner-provided webhook is embedded in `src/reporting-config.js` and the production bookmarklet bundle. It is extractable by anyone able to read that code; this is accepted client-side configuration, not encryption or secret storage. To rotate it, replace that constant and publish a new release. Reporting itself remains opt-in.
 
 ## Automatic placement and submission
 
@@ -73,7 +87,7 @@ All raw games, traces, confidence intervals, learned leave values, prediction/ca
 
 GitHub Pages: https://b10xdragon.github.io/islenska-solver/
 
-Málstaður allows `cdn.jsdelivr.net` scripts but blocks GitHub Pages scripts/frames. The small bookmarklet therefore loads the immutable GitHub release **v5.0.0** through jsDelivr. The single button uses Shadow DOM and bundled styles, without a hosted iframe.
+Málstaður allows `cdn.jsdelivr.net` scripts but blocks GitHub Pages scripts/frames. The small bookmarklet therefore loads the immutable GitHub release **v5.1.0** through jsDelivr. The single button uses Shadow DOM and bundled styles, without a hosted iframe.
 
 The dictionary loads lazily when you first enable automation. The original compact DAWG is decoded from the permitted dictionary data script and saved in IndexedDB on the current page origin. Future launches reuse the cache. A bundled-source blob Web Worker handles searches; if unavailable, cooperative execution yields every 2,048 node visits.
 
