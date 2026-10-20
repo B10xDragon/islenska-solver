@@ -6,18 +6,21 @@ export function legalHooks(word,dictionary){let cache=hookCaches.get(dictionary)
 export const countLegalFrontHooks=(word,dictionary)=>legalHooks(word,dictionary).front.length;
 export const countLegalBackHooks=(word,dictionary)=>legalHooks(word,dictionary).back.length;
 export function boardFeatures(board,multipliers,dictionary){
- const n=board.length,inside=(r,c)=>r>=0&&c>=0&&r<n&&c<n,anchors=new Set(),premium=new Map();let parallel=0,longLanes=0,hooks=0,frontHooks=0,backHooks=0;
- for(let r=0;r<n;r++)for(let c=0;c<n;c++)if(!board[r][c]){
-  const adjacent=[[1,0],[-1,0],[0,1],[0,-1]].filter(([dr,dc])=>inside(r+dr,c+dc)&&board[r+dr][c+dc]);if(adjacent.length)anchors.add(r*n+c);
-  for(const [dr,dc]of [[1,0],[0,1]]){
-   if(!inside(r-dr,c-dc)||board[r-dr][c-dc]){let length=0,touches=0;for(let rr=r,cc=c;inside(rr,cc)&&!board[rr][cc];rr+=dr,cc+=dc){length++;if([[dc,dr],[-dc,-dr]].some(([a,b])=>inside(rr+a,cc+b)&&board[rr+a][cc+b]))touches++;}if(length>=7&&touches)longLanes++;if(touches>=2)parallel+=touches-1;}
+ // Four linear sweeps replace a ray walk from every premium square.
+ const n=board.length,total=n*n,access=new Float64Array(total);
+ let anchors=0,parallel=0,longLanes=0,frontHooks=0,backHooks=0;
+ for(let r=0;r<n;r++)for(let c=0;c<n;c++)if(!board[r][c]){const a=+(r>0&&!!board[r-1][c]) + +(r+1<n&&!!board[r+1][c]) + +(c>0&&!!board[r][c-1]) + +(c+1<n&&!!board[r][c+1]);if(a){anchors++;access[r*n+c]=1+a*F.adjacency;}}
+ for(let axis=0;axis<2;axis++)for(let line=0;line<n;line++){
+  const at=i=>axis?board[i][line]:board[line][i],index=i=>axis?i*n+line:line*n+i;
+  // Each contiguous empty run is a possible lane; perpendicular adjacency matters.
+  for(let i=0;i<n;){if(at(i)){i++;continue;}const start=i;let touches=0;while(i<n&&!at(i)){const r=axis?i:line,c=axis?line:i;if(axis?(c>0&&board[r][c-1]||c+1<n&&board[r][c+1]):(r>0&&board[r-1][c]||r+1<n&&board[r+1][c]))touches++;i++;}if(i-start>=7&&touches)longLanes++;if(touches>=2)parallel+=touches-1;}
+  for(const direction of [1,-1]){let distance=F.reach+1,value=0,occupied=false;
+   for(let i=direction===1?0:n-1;i>=0&&i<n;i+=direction){const t=at(i);if(t){value=(occupied?value:0)+(t.blank?0:DEFAULT_VALUES[t.letter]||0);distance=0;occupied=true;}else{distance++;occupied=false;if(distance<=F.reach){const k=index(i);access[k]=Math.max(access[k],(F.reach+1-distance)/F.reach*(1+value/F.valueScale));}}}
   }
-  const m=multipliers[r][c];if(m.word===1&&m.letter===1)continue;
-  let access=0;for(const [dr,dc]of [[1,0],[-1,0],[0,1],[0,-1]])for(let d=1;d<=F.reach;d++){const rr=r+dr*d,cc=c+dc*d;if(!inside(rr,cc))break;if(board[rr][cc]){let value=0;for(let a=rr,b=cc;inside(a,b)&&board[a][b];a+=dr,b+=dc)value+=board[a][b].blank?0:DEFAULT_VALUES[board[a][b].letter]||0;access=Math.max(access,(F.reach+1-d)/F.reach*(1+value/F.valueScale));break;}}
-  if(adjacent.length)access=Math.max(access,1+adjacent.length*F.adjacency);premium.set(r*n+c,{type:m.word===3?'TW':m.word===2?'DW':m.letter===3?'TL':'DL',access});
+  if(dictionary)for(let i=0;i<n;){if(!at(i)){i++;continue;}const start=i;let word='';while(i<n&&at(i))word+=at(i++).letter;if(word.length<2)continue;const h=legalHooks(word,dictionary);if(start>0)frontHooks+=h.front.length;if(i<n)backHooks+=h.back.length;}
  }
- if(dictionary)for(let r=0;r<n;r++)for(let c=0;c<n;c++)if(board[r][c])for(const [dr,dc]of [[1,0],[0,1]]){if(inside(r-dr,c-dc)&&board[r-dr][c-dc])continue;let word='',rr=r,cc=c;while(inside(rr,cc)&&board[rr][cc]){word+=board[rr][cc].letter;rr+=dr;cc+=dc;}if(word.length<2)continue;const h=legalHooks(word,dictionary);if(inside(r-dr,c-dc)){hooks+=h.front.length;frontHooks+=h.front.length;}if(inside(rr,cc)){hooks+=h.back.length;backHooks+=h.back.length;}}
- return {anchors:anchors.size,parallel,longLanes,hooks,frontHooks,backHooks,premium};
+ const premium=new Map();for(let r=0;r<n;r++)for(let c=0;c<n;c++)if(!board[r][c]){const m=multipliers[r][c];if(m.word===1&&m.letter===1)continue;premium.set(r*n+c,{type:m.word===3?'TW':m.word===2?'DW':m.letter===3?'TL':'DL',access:access[r*n+c]});}
+ return {anchors,parallel,longLanes,hooks:frontHooks+backHooks,frontHooks,backHooks,premium};
 }
 export function boardOpenScore(board,multipliers,dictionary){const f=boardFeatures(board,multipliers,dictionary);return openness(f);}
 export function openness(f){return f.anchors*F.anchor+f.parallel*F.parallel+f.longLanes*F.longLane+f.hooks*F.hook;}

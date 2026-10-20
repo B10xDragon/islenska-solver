@@ -1,3 +1,7 @@
+# V6.0.0
+
+See [V6 release notes, measurements and kill-switch instructions](V6-RELEASE.md).
+
 Release 5.2.0 restores the v5.0.0 bot and strategy, removing all Discord reporting. Only release/cache identifiers differ from that implementation.
 
 # Íslenska Solver — iPad Safari bookmarklet

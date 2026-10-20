@@ -1,13 +1,13 @@
 import {positionKey,watchGame} from './live-game.js';
 export function createAutomation({read,search,stage,submit,doc,onState=()=>{},watch=watchGame,getOptions=()=>({})}) {
  let state={enabled:false,phase:'off',message:'Auto place and Leika OFF',bestMove:null,stats:null},watcher=null,active=null,destroyed=false,generation=0,plan=null;
- const attempted=new Set();
+ const attempted=new Set();const mark=key=>{attempted.add(key);if(attempted.size>256)attempted.delete(attempted.values().next().value);};
  function publish(phase,message,extra={}){state={...state,phase,message,...extra};onState({...state});}
  function matching(snapshot){return plan?.key===positionKey(snapshot)&&(snapshot.pendingTiles||[]).every(tile=>plan.move.placedTiles.some(t=>t.row===tile.row&&(t.col??t.column)===tile.col&&t.letter===tile.letter&&!!t.blank===!!tile.blank));}
  function consider(snapshot){
   if(destroyed||!state.enabled)return;
   const key=positionKey(snapshot);
-  if(active){if(key!==active.key||(snapshot.pending&&!matching(snapshot)))active.controller.abort();return;}
+  if(active){if(key!==active.key||(snapshot.pending&&!matching(snapshot))){active.controller.abort();search.cancel?.();}return;}
   if(!snapshot?.detected){publish('waiting','Open a loaded game board.');return;}
   if(snapshot.canStage===false){publish('waiting',snapshot.stageReason||'Waiting for your turn.');return;}
   if(attempted.has(key))return;
@@ -21,19 +21,19 @@ export function createAutomation({read,search,stage,submit,doc,onState=()=>{},wa
     publish('loading','Loading Icelandic dictionary…');await search.prepare(message=>{if(valid())publish('loading',message);});checked();
     let move;if(plan?.key===key&&matching(read()))move=plan.move;
     else{publish('solving','Evaluating moves and opponent opportunities…');const result=await search.solve(snapshot,getOptions(snapshot));checked();move=result.bestMove;state={...state,bestMove:move,stats:result.stats,result};}
-    if(!move){attempted.add(key);publish('waiting',state.result?.endgame?.pass?'Endgame recommends passing. Pass manually.':'No legal move available.');return;}
-    plan={key,move};publish('preview',`${move.word} · ${move.score} points · rating ${move.evaluation??move.score}`);await new Promise(r=>setTimeout(r,350));checked();attempted.add(key);checked();publish('placing',`Placing ${move.word} · ${move.score} points`);
+    if(!move){mark(key);publish('waiting',state.result?.endgame?.pass?'Endgame recommends passing. Pass manually.':'No legal move available.');return;}
+    plan={key,move};publish('preview',`${move.word} · ${move.score} points · rating ${move.evaluation??move.score}`);await new Promise(r=>setTimeout(r,350));checked();mark(key);checked();publish('placing',`Placing ${move.word} · ${move.score} points`);
     await stage({move,expected:key,signal:task.controller.signal,onProgress:(done,total)=>{if(valid())publish('placing',`Placing ${move.word}: ${done}/${total}`);}});checked();
     publish('submitting','Waiting for Leika…');await submit({move,expected:key,signal:task.controller.signal,isEnabled:valid});
     if(valid())publish('waiting',`${move.word} submitted. Waiting for the next turn.`);
-   }catch(error){if(valid()){attempted.add(key);publish('error',error.message);}}
+   }catch(error){if(valid()){mark(key);publish('error',error.message);}}
    finally{if(active===task)active=null;if(!destroyed&&state.enabled)consider(read());}
   })();
  }
  function setEnabled(enabled){
   if(destroyed||state.enabled===!!enabled)return;
   generation++;state={...state,enabled:!!enabled};active?.controller.abort();watcher?.stop();watcher=null;
-  if(!state.enabled){publish('off','Auto place and Leika OFF');return;}
+  if(!state.enabled){search.cancel?.();publish('off','Auto place and Leika OFF');return;}
   attempted.delete(positionKey(read()));publish('waiting','Auto place and Leika ON');
   watcher=watch({read,doc,onChange:consider});
  }

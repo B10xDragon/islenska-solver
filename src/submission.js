@@ -16,7 +16,7 @@ function readyButton(root) {
  if(indicators.some(e=>e.classList.contains('word-bad')))return null;
  return [...root.querySelectorAll('#submitmove,.submitmove,#move-mobile,[data-action="submit-move"]')].find(element=>visible(element)&&!element.disabled&&!element.closest('[disabled],[aria-disabled="true"],.disabled')&&(element.id!=='move-mobile'||element.classList.contains('word-good')||element.classList.contains('manual')));
 }
-export function createSubmitter({read}) {
+export function createSubmitter({read,beforeSubmit=async()=>{}}) {
  const clicked=new Set(),running=new Map();
  return function submit({move,expected,signal,isEnabled=()=>false,timeout=10000}) {
   const key=typeof expected==='string'?expected:positionKey(expected);
@@ -39,10 +39,11 @@ export function createSubmitter({read}) {
    while(Date.now()-start<timeout) {
     let snapshot=checked(),button=readyButton(snapshot.live.root);
     if(button){
+     await beforeSubmit();
      snapshot=checked();button=readyButton(snapshot.live.root);if(!button)continue;
      // Record before activation: a thrown or delayed client response must not
      // cause an automatic second submission of the same position.
-     clicked.add(key);recordPlacement(snapshot.live.root,{phase:'submit',target:describeElement(button),word:move.word});button.click();return {clicked:true};
+     clicked.add(key);if(clicked.size>256)clicked.delete(clicked.values().next().value);recordPlacement(snapshot.live.root,{phase:'submit',target:describeElement(button),word:move.word});button.click();return {clicked:true};
     }
     await pause(80);
    }

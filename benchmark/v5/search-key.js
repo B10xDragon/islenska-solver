@@ -1,0 +1,1 @@
+export function searchPositionKey({board,rack=[],opponentRack=[],bag=[],turn=0,scoreDifference=0,passes=0}){return JSON.stringify([board.map(row=>row.map(t=>t?(t.blank?t.letter.toLowerCase():t.letter):'.').join('')),[...rack].sort().join(''),[...opponentRack].sort().join(''),[...bag].sort().join(''),turn,scoreDifference,passes]);}

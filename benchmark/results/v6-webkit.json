@@ -1,0 +1,467 @@
+{
+  "method": "WebKit Worker on the Linux runner, cold DAWG caches, 14 positions × 2 repeats, alternating version order. Safari engine compatibility/workload proxy, NOT measurements from physical iPad hardware.",
+  "summary": {
+    "v5": {
+      "decisions": 28,
+      "medianMs": 106,
+      "p95Ms": 468,
+      "worstMs": 952
+    },
+    "v6": {
+      "decisions": 28,
+      "medianMs": 54,
+      "p95Ms": 124,
+      "worstMs": 487
+    }
+  },
+  "rows": [
+    {
+      "name": "v5",
+      "position": "safe-vs-dangerous",
+      "repeat": 0,
+      "totalMs": 346,
+      "generationMs": 21,
+      "strategyMs": 323
+    },
+    {
+      "name": "v6",
+      "position": "safe-vs-dangerous",
+      "repeat": 0,
+      "totalMs": 124,
+      "generationMs": 17,
+      "strategyMs": 105
+    },
+    {
+      "name": "v5",
+      "position": "TW-exposure",
+      "repeat": 0,
+      "totalMs": 136,
+      "generationMs": 18,
+      "strategyMs": 117
+    },
+    {
+      "name": "v6",
+      "position": "TW-exposure",
+      "repeat": 0,
+      "totalMs": 58,
+      "generationMs": 9,
+      "strategyMs": 49
+    },
+    {
+      "name": "v5",
+      "position": "DW-exposure",
+      "repeat": 0,
+      "totalMs": 157,
+      "generationMs": 33,
+      "strategyMs": 124
+    },
+    {
+      "name": "v6",
+      "position": "DW-exposure",
+      "repeat": 0,
+      "totalMs": 67,
+      "generationMs": 15,
+      "strategyMs": 52
+    },
+    {
+      "name": "v5",
+      "position": "parallel-lane",
+      "repeat": 0,
+      "totalMs": 106,
+      "generationMs": 23,
+      "strategyMs": 83
+    },
+    {
+      "name": "v6",
+      "position": "parallel-lane",
+      "repeat": 0,
+      "totalMs": 54,
+      "generationMs": 11,
+      "strategyMs": 43
+    },
+    {
+      "name": "v5",
+      "position": "front-hook",
+      "repeat": 0,
+      "totalMs": 59,
+      "generationMs": 13,
+      "strategyMs": 46
+    },
+    {
+      "name": "v6",
+      "position": "front-hook",
+      "repeat": 0,
+      "totalMs": 29,
+      "generationMs": 7,
+      "strategyMs": 22
+    },
+    {
+      "name": "v5",
+      "position": "back-hook",
+      "repeat": 0,
+      "totalMs": 118,
+      "generationMs": 21,
+      "strategyMs": 97
+    },
+    {
+      "name": "v6",
+      "position": "back-hook",
+      "repeat": 0,
+      "totalMs": 60,
+      "generationMs": 9,
+      "strategyMs": 51
+    },
+    {
+      "name": "v5",
+      "position": "blank-preservation",
+      "repeat": 0,
+      "totalMs": 942,
+      "generationMs": 124,
+      "strategyMs": 818
+    },
+    {
+      "name": "v6",
+      "position": "blank-preservation",
+      "repeat": 0,
+      "totalMs": 487,
+      "generationMs": 50,
+      "strategyMs": 437
+    },
+    {
+      "name": "v5",
+      "position": "rack-leave",
+      "repeat": 0,
+      "totalMs": 54,
+      "generationMs": 10,
+      "strategyMs": 44
+    },
+    {
+      "name": "v6",
+      "position": "rack-leave",
+      "repeat": 0,
+      "totalMs": 26,
+      "generationMs": 6,
+      "strategyMs": 20
+    },
+    {
+      "name": "v5",
+      "position": "ahead-80",
+      "repeat": 0,
+      "totalMs": 46,
+      "generationMs": 7,
+      "strategyMs": 39
+    },
+    {
+      "name": "v6",
+      "position": "ahead-80",
+      "repeat": 0,
+      "totalMs": 26,
+      "generationMs": 5,
+      "strategyMs": 21
+    },
+    {
+      "name": "v5",
+      "position": "behind-80",
+      "repeat": 0,
+      "totalMs": 44,
+      "generationMs": 7,
+      "strategyMs": 37
+    },
+    {
+      "name": "v6",
+      "position": "behind-80",
+      "repeat": 0,
+      "totalMs": 25,
+      "generationMs": 6,
+      "strategyMs": 19
+    },
+    {
+      "name": "v5",
+      "position": "early",
+      "repeat": 0,
+      "totalMs": 468,
+      "generationMs": 59,
+      "strategyMs": 409
+    },
+    {
+      "name": "v6",
+      "position": "early",
+      "repeat": 0,
+      "totalMs": 124,
+      "generationMs": 23,
+      "strategyMs": 101
+    },
+    {
+      "name": "v5",
+      "position": "midgame",
+      "repeat": 0,
+      "totalMs": 98,
+      "generationMs": 23,
+      "strategyMs": 75
+    },
+    {
+      "name": "v6",
+      "position": "midgame",
+      "repeat": 0,
+      "totalMs": 44,
+      "generationMs": 7,
+      "strategyMs": 37
+    },
+    {
+      "name": "v5",
+      "position": "late",
+      "repeat": 0,
+      "totalMs": 108,
+      "generationMs": 16,
+      "strategyMs": 92
+    },
+    {
+      "name": "v6",
+      "position": "late",
+      "repeat": 0,
+      "totalMs": 56,
+      "generationMs": 11,
+      "strategyMs": 45
+    },
+    {
+      "name": "v5",
+      "position": "near-exact-endgame",
+      "repeat": 0,
+      "totalMs": 182,
+      "generationMs": 19,
+      "strategyMs": 163
+    },
+    {
+      "name": "v6",
+      "position": "near-exact-endgame",
+      "repeat": 0,
+      "totalMs": 124,
+      "generationMs": 8,
+      "strategyMs": 116
+    },
+    {
+      "name": "v6",
+      "position": "safe-vs-dangerous",
+      "repeat": 1,
+      "totalMs": 79,
+      "generationMs": 7,
+      "strategyMs": 72
+    },
+    {
+      "name": "v5",
+      "position": "safe-vs-dangerous",
+      "repeat": 1,
+      "totalMs": 318,
+      "generationMs": 20,
+      "strategyMs": 298
+    },
+    {
+      "name": "v6",
+      "position": "TW-exposure",
+      "repeat": 1,
+      "totalMs": 43,
+      "generationMs": 9,
+      "strategyMs": 34
+    },
+    {
+      "name": "v5",
+      "position": "TW-exposure",
+      "repeat": 1,
+      "totalMs": 96,
+      "generationMs": 15,
+      "strategyMs": 81
+    },
+    {
+      "name": "v6",
+      "position": "DW-exposure",
+      "repeat": 1,
+      "totalMs": 58,
+      "generationMs": 13,
+      "strategyMs": 45
+    },
+    {
+      "name": "v5",
+      "position": "DW-exposure",
+      "repeat": 1,
+      "totalMs": 128,
+      "generationMs": 29,
+      "strategyMs": 99
+    },
+    {
+      "name": "v6",
+      "position": "parallel-lane",
+      "repeat": 1,
+      "totalMs": 49,
+      "generationMs": 11,
+      "strategyMs": 38
+    },
+    {
+      "name": "v5",
+      "position": "parallel-lane",
+      "repeat": 1,
+      "totalMs": 101,
+      "generationMs": 18,
+      "strategyMs": 83
+    },
+    {
+      "name": "v6",
+      "position": "front-hook",
+      "repeat": 1,
+      "totalMs": 32,
+      "generationMs": 10,
+      "strategyMs": 22
+    },
+    {
+      "name": "v5",
+      "position": "front-hook",
+      "repeat": 1,
+      "totalMs": 57,
+      "generationMs": 13,
+      "strategyMs": 44
+    },
+    {
+      "name": "v6",
+      "position": "back-hook",
+      "repeat": 1,
+      "totalMs": 57,
+      "generationMs": 11,
+      "strategyMs": 46
+    },
+    {
+      "name": "v5",
+      "position": "back-hook",
+      "repeat": 1,
+      "totalMs": 121,
+      "generationMs": 26,
+      "strategyMs": 95
+    },
+    {
+      "name": "v6",
+      "position": "blank-preservation",
+      "repeat": 1,
+      "totalMs": 441,
+      "generationMs": 48,
+      "strategyMs": 393
+    },
+    {
+      "name": "v5",
+      "position": "blank-preservation",
+      "repeat": 1,
+      "totalMs": 952,
+      "generationMs": 128,
+      "strategyMs": 824
+    },
+    {
+      "name": "v6",
+      "position": "rack-leave",
+      "repeat": 1,
+      "totalMs": 30,
+      "generationMs": 5,
+      "strategyMs": 25
+    },
+    {
+      "name": "v5",
+      "position": "rack-leave",
+      "repeat": 1,
+      "totalMs": 52,
+      "generationMs": 9,
+      "strategyMs": 43
+    },
+    {
+      "name": "v6",
+      "position": "ahead-80",
+      "repeat": 1,
+      "totalMs": 26,
+      "generationMs": 6,
+      "strategyMs": 20
+    },
+    {
+      "name": "v5",
+      "position": "ahead-80",
+      "repeat": 1,
+      "totalMs": 49,
+      "generationMs": 6,
+      "strategyMs": 43
+    },
+    {
+      "name": "v6",
+      "position": "behind-80",
+      "repeat": 1,
+      "totalMs": 36,
+      "generationMs": 5,
+      "strategyMs": 31
+    },
+    {
+      "name": "v5",
+      "position": "behind-80",
+      "repeat": 1,
+      "totalMs": 54,
+      "generationMs": 13,
+      "strategyMs": 41
+    },
+    {
+      "name": "v6",
+      "position": "early",
+      "repeat": 1,
+      "totalMs": 124,
+      "generationMs": 25,
+      "strategyMs": 99
+    },
+    {
+      "name": "v5",
+      "position": "early",
+      "repeat": 1,
+      "totalMs": 450,
+      "generationMs": 53,
+      "strategyMs": 397
+    },
+    {
+      "name": "v6",
+      "position": "midgame",
+      "repeat": 1,
+      "totalMs": 41,
+      "generationMs": 6,
+      "strategyMs": 35
+    },
+    {
+      "name": "v5",
+      "position": "midgame",
+      "repeat": 1,
+      "totalMs": 90,
+      "generationMs": 16,
+      "strategyMs": 74
+    },
+    {
+      "name": "v6",
+      "position": "late",
+      "repeat": 1,
+      "totalMs": 50,
+      "generationMs": 7,
+      "strategyMs": 43
+    },
+    {
+      "name": "v5",
+      "position": "late",
+      "repeat": 1,
+      "totalMs": 103,
+      "generationMs": 14,
+      "strategyMs": 89
+    },
+    {
+      "name": "v6",
+      "position": "near-exact-endgame",
+      "repeat": 1,
+      "totalMs": 102,
+      "generationMs": 5,
+      "strategyMs": 97
+    },
+    {
+      "name": "v5",
+      "position": "near-exact-endgame",
+      "repeat": 1,
+      "totalMs": 146,
+      "generationMs": 15,
+      "strategyMs": 131
+    }
+  ]
+}
